@@ -1,4 +1,4 @@
-# Sistema Registrador de Matérias
+# Sistema Gestor Acadêmico
 
 Um programa simples em Python criado para ajudar estudantes a gerenciar suas notas, faltas e desempenho acadêmico de forma prática e organizada.
 
