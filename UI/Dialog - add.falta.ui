@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dialog</class>
+ <widget class="QDialog" name="Dialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>495</width>
+    <height>217</height>
+   </rect>
+  </property>
+  <property name="font">
+   <font>
+    <pointsize>1</pointsize>
+   </font>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <widget class="QFrame" name="frame_add_falta">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>471</width>
+     <height>201</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <pointsize>1</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">/* =======================================================
+   1. O CARTÃO DO DIÁLOGO (BASE)
+   ======================================================= */
+QFrame#frame_add_falta {
+    background-color: #FFFFFF;
+    border-radius: 20px;         /* Cantos bem arredondados */
+    border: 1px solid #E2E8F0;   /* Borda externa sutil */
+    border: 4px solid #E2E8F0; /* Efeito de profundidade/3D suave */
+}
+
+/* =======================================================
+   2. TIPOGRAFIA (TÍTULOS E TEXTOS)
+   ======================================================= */
+/* Título Principal */
+QLabel#label_card_falta {
+    color: #2D3748;       /* Cinza Chumbo (Elegante) */
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    font-size: 24px;
+    font-weight: 800;     /* Extra Bold */
+    background-color: transparent;
+    padding-left: 10px;
+}
+
+/* Label &quot;Faltas:&quot; */
+QLabel#label_falta {
+    color: #718096;       /* Cinza médio */
+    font-size: 16px;
+    font-weight: 600;
+    background-color: transparent;
+}
+
+/* Frame container do input (Removemos a borda para ficar clean) */
+QFrame#frame_falta {
+    background-color: transparent;
+    border: none;
+}
+
+/* =======================================================
+   3. INPUT MODERNO (SPINBOX &quot;FILLED&quot;)
+   ======================================================= */
+QSpinBox#spinBox_falta {
+    background-color: #EDF2F7; /* Fundo Cinza Claro */
+    color: #2D3748;            /* Texto Escuro */
+    font-size: 20px;
+    font-weight: bold;
+    border-radius: 8px;       /* Pílula */
+    border: 2px solid transparent;
+    padding: 5px 10px;
+}
+
+/* Estado de Foco (Quando clica para mudar o valor) */
+QSpinBox#spinBox_falta:focus {
+    background-color: #FFFFFF; /* Fundo vira branco */
+    border: 2px solid #667EEA; /* Borda Roxa Vibrante */
+    color: #000000;
+}
+
+/* Removemos os botões feios padrão e deixamos clean */
+/* (O usuário pode usar as setas do teclado ou scroll do mouse) */
+QSpinBox::up-button, QSpinBox::down-button {
+    width: 0px;
+    border: none;
+    background: transparent;
+}
+
+/* =======================================================
+   4. BOTÕES (AÇÃO E CANCELAR)
+   ======================================================= */
+
+/* --- BOTÃO SALVAR (Gradiente &quot;Juicy&quot;) --- */
+QPushButton#btn_salvar {
+    /* Gradiente Roxo -&gt; Azul (Mesmo tema do dashboard) */
+    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 #667EEA, stop:1 #764BA2);
+    color: #FFFFFF;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: bold;
+    border: none;
+}
+
+QPushButton#btn_salvar:hover {
+    /* Inverte levemente o gradiente para efeito visual */
+    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 #764BA2, stop:1 #667EEA);
+    margin-top: 1px;
+}
+
+QPushButton#btn_salvar:pressed {
+    background-color: #553C9A; /* Roxo escuro sólido */
+    padding-top: 3px;          /* Efeito de clique */
+}
+
+/* --- BOTÃO CANCELAR (Minimalista) --- */
+QPushButton#btn_cancelar {
+    background-color: #FFFFFF;
+    color: #A0AEC0;            /* Cinza claro (Discreto) */
+    border: 2px solid #EDF2F7; /* Borda bem sutil */
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+QPushButton#btn_cancelar:hover {
+    background-color: #FFF5F5; /* Fundo levemente avermelhado */
+    color: #E53E3E;            /* Texto Vermelho */
+    border: 2px solid #FEB2B2;
+}
+
+QPushButton#btn_cancelar:pressed {
+    background-color: #E53E3E;
+    color: #FFFFFF;
+    border: none;
+}</string>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::StyledPanel</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Raised</enum>
+   </property>
+   <widget class="QLabel" name="label_card_falta">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>10</y>
+      <width>471</width>
+      <height>81</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Segoe UI,sans-serif</family>
+      <pointsize>-1</pointsize>
+      <weight>99</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <property name="text">
+     <string>Adicionar Falta Matéria X</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QFrame" name="frame_falta">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>60</y>
+      <width>171</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>1</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::StyledPanel</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Raised</enum>
+    </property>
+    <widget class="QLabel" name="label_falta">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>10</y>
+       <width>71</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>-1</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
+     <property name="text">
+      <string>Faltas:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+     </property>
+    </widget>
+    <widget class="QSpinBox" name="spinBox_falta">
+     <property name="geometry">
+      <rect>
+       <x>90</x>
+       <y>10</y>
+       <width>61</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>-1</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
+     <property name="frame">
+      <bool>true</bool>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+     <property name="buttonSymbols">
+      <enum>QAbstractSpinBox::NoButtons</enum>
+     </property>
+    </widget>
+    <zorder>spinBox_falta</zorder>
+    <zorder>label_falta</zorder>
+   </widget>
+   <widget class="QPushButton" name="btn_cancelar">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>140</y>
+      <width>221</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>-1</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::LeftToRight</enum>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <property name="text">
+     <string>Cancelar</string>
+    </property>
+    <property name="default">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_salvar">
+    <property name="geometry">
+     <rect>
+      <x>240</x>
+      <y>140</y>
+      <width>221</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>-1</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::LeftToRight</enum>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <property name="text">
+     <string>Salvar</string>
+    </property>
+    <property name="default">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <zorder>btn_cancelar</zorder>
+   <zorder>btn_salvar</zorder>
+   <zorder>label_card_falta</zorder>
+   <zorder>frame_falta</zorder>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

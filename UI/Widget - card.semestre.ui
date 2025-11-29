@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>368</width>
+    <height>150</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
+  <widget class="QFrame" name="frame_card_semestre">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>351</width>
+     <height>131</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">/* =======================================================
+   1. O CARTÃO (BASE)
+   ======================================================= */
+QFrame#frame_card_semestre {
+    background-color: #FFFFFF;
+    border-radius: 20px;
+    border: 1px solid #F1F5F9; 
+    border-bottom: 2px solid #E2E8F0; 
+}
+
+/* =======================================================
+   2. TIPOGRAFIA
+   ======================================================= */
+
+/* Nome do Semestre */
+QLabel#label_nome {
+    color: #2D3748;         /* Cinza Chumbo */
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    font-size: 22px;
+    font-weight: 800;       /* Extra Bold */
+    background: transparent;
+}
+
+/* Situação (Em andamento/Finalizado) */
+QLabel#label_situacao {
+    color: #718096;         /* Cinza médio */
+    font-size: 15px;
+    font-weight: 600;
+    background: transparent;
+}
+
+/* =======================================================
+   3. BOTÕES DE AÇÃO (SOFT UI)
+   ======================================================= */
+
+/* --- BOTÃO INICIAR (Verde Suave) --- */
+QPushButton#btn_iniciar_semestre {
+    background-color: #F0FFF4; /* Verde muito pálido */
+    border: 1px solid #C6F6D5; /* Borda verde clara */
+    color: #2F855A;            /* Texto verde escuro */
+    border-radius: 12px;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+QPushButton#btn_iniciar_semestre:hover {
+    background-color: #C6F6D5; /* Verde médio */
+    border-color: #48BB78;     /* Borda verde vibrante */
+}
+
+QPushButton#btn_iniciar_semestre:pressed {
+    background-color: #48BB78; /* Verde vibrante sólido */
+    color: white;
+    border: none;
+}
+
+/* --- BOTÃO FINALIZAR (Vermelho/Coral Suave) --- */
+QPushButton#btn_finaliza_semestre {
+    background-color: #FFF5F5; /* Vermelho muito pálido */
+    border: 1px solid #FED7D7; /* Borda vermelha clara */
+    color: #C53030;            /* Texto vermelho escuro */
+    border-radius: 12px;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+QPushButton#btn_finaliza_semestre:hover {
+    background-color: #FED7D7;
+    border-color: #F56565;
+}
+
+QPushButton#btn_finaliza_semestre:pressed {
+    background-color: #F56565; /* Vermelho vibrante sólido */
+    color: white;
+    border: none;
+}
+
+/* --- BOTÃO DELETAR (Minimalista no canto) --- */
+QPushButton#btn_delete_semestre {
+    background-color: transparent;
+    border: none;
+    border-radius: 10px;
+}
+
+QPushButton#btn_delete_semestre:hover {
+    background-color: #FFF5F5; /* Fundo levemente vermelho */
+    border: 1px solid #FC8181;
+}
+
+QPushButton#btn_delete_semestre:pressed {
+    background-color: #F56565;
+    border: none;
+}</string>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::NoFrame</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Raised</enum>
+   </property>
+   <property name="lineWidth">
+    <number>0</number>
+   </property>
+   <widget class="QLabel" name="label_nome">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>10</y>
+      <width>281</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Segoe UI,sans-serif</family>
+      <pointsize>-1</pointsize>
+      <weight>99</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <property name="text">
+     <string>Semestre X</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_situacao">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>40</y>
+      <width>201</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>-1</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <property name="text">
+     <string>Situação: Em Andamento</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_finaliza_semestre">
+    <property name="geometry">
+     <rect>
+      <x>190</x>
+      <y>80</y>
+      <width>141</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>-1</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <property name="text">
+     <string>Finalizar</string>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>28</width>
+      <height>28</height>
+     </size>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_delete_semestre">
+    <property name="geometry">
+     <rect>
+      <x>310</x>
+      <y>10</y>
+      <width>31</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::LeftToRight</enum>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>../Assets/Icons/Cross_icon.png</normaloff>../Assets/Icons/Cross_icon.png</iconset>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_iniciar_semestre">
+    <property name="geometry">
+     <rect>
+      <x>190</x>
+      <y>80</y>
+      <width>141</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>-1</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <property name="text">
+     <string>Iniciar</string>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>28</width>
+      <height>28</height>
+     </size>
+    </property>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

@@ -1,0 +1,418 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dialog</class>
+ <widget class="QDialog" name="Dialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>495</width>
+    <height>217</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">Qframe{ 	
+border: 1px solid #ccc;       /* Borda cinza suave */
+    border-radius: 8px; 
+	background-color: #FAF9F6;
+}</string>
+  </property>
+  <widget class="QFrame" name="frame_add_nota">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>471</width>
+     <height>201</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">/* =======================================================
+   1. O CARTÃO DO DIÁLOGO (BASE)
+   ======================================================= */
+QFrame#frame_add_nota {
+    background-color: #FFFFFF;
+    border-radius: 20px;         /* Cantos arredondados modernos */
+    border: 1px solid #E2E8F0;   /* Borda externa sutil */
+    border:4px solid #E2E8F0; /* Efeito de profundidade/3D */
+}
+
+/* =======================================================
+   2. TIPOGRAFIA
+   ======================================================= */
+/* Título Principal */
+QLabel#label_card_materia {
+    color: #2D3748;       /* Cinza Chumbo */
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    font-size: 24px;
+    font-weight: 800;     /* Extra Bold */
+    background-color: transparent;
+    padding-left: 10px;
+}
+
+/* Labels (&quot;Nota:&quot; e &quot;Peso da Nota:&quot;) */
+QLabel#label_nota, QLabel#label_nota_3 {
+    color: #718096;       /* Cinza médio */
+    font-size: 16px;
+    font-weight: 600;
+    background-color: transparent;
+}
+
+/* Containers dos inputs (Remove bordas antigas) */
+QFrame#frame_nota, QFrame#frame_peso_nota {
+    background-color: transparent;
+    border: none;
+}
+
+/* =======================================================
+   3. INPUTS MODERNOS (DOUBLE SPINBOX &quot;FILLED&quot;)
+   ======================================================= */
+QDoubleSpinBox {
+    background-color: #EDF2F7; /* Fundo Cinza Claro */
+    color: #2D3748;            /* Texto Escuro */
+    font-size: 20px;
+    font-weight: bold;
+    border-radius: 8px;       /* Formato de pílula/arredondado */
+    border: 2px solid transparent;
+    padding: 5px 10px;
+}
+
+/* Estado de Foco (Ao clicar) */
+QDoubleSpinBox:focus {
+    background-color: #FFFFFF; /* Fundo vira branco */
+    border: 2px solid #667EEA; /* Borda Roxa/Azul Vibrante */
+    color: #000000;
+}
+
+/* Remove os botões de seta padrão (Up/Down) */
+QDoubleSpinBox::up-button, QDoubleSpinBox::down-button {
+    width: 0px;
+    border: none;
+    background: transparent;
+}
+
+/* =======================================================
+   4. BOTÕES (AÇÃO E CANCELAR)
+   ======================================================= */
+
+/* --- BOTÃO SALVAR (Gradiente) --- */
+QPushButton#btn_salvar {
+    /* Gradiente Roxo -&gt; Azul */
+    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 #667EEA, stop:1 #764BA2);
+    color: #FFFFFF;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: bold;
+    border: none;
+}
+
+QPushButton#btn_salvar:hover {
+    /* Inverte levemente o gradiente */
+    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 #764BA2, stop:1 #667EEA);
+    margin-top: 1px;
+}
+
+QPushButton#btn_salvar:pressed {
+    background-color: #553C9A;
+    padding-top: 3px;
+}
+
+/* --- BOTÃO CANCELAR (Clean) --- */
+QPushButton#btn_cancelar {
+    background-color: #FFFFFF;
+    color: #A0AEC0;            /* Cinza claro */
+    border: 2px solid #EDF2F7;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+QPushButton#btn_cancelar:hover {
+    background-color: #FFF5F5; /* Fundo avermelhado bem claro */
+    color: #E53E3E;            /* Vermelho Alerta */
+    border: 2px solid #FEB2B2;
+}
+
+QPushButton#btn_cancelar:pressed {
+    background-color: #E53E3E;
+    color: #FFFFFF;
+    border: none;
+}</string>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::StyledPanel</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Raised</enum>
+   </property>
+   <widget class="QLabel" name="label_card_materia">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>471</width>
+      <height>81</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Segoe UI,sans-serif</family>
+      <pointsize>-1</pointsize>
+      <weight>99</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <property name="text">
+     <string>Adicionar Nota Matéria X</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QFrame" name="frame_nota">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>70</y>
+      <width>161</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::StyledPanel</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Raised</enum>
+    </property>
+    <widget class="QLabel" name="label_nota">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>20</y>
+       <width>61</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>-1</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
+     <property name="text">
+      <string>Nota:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+     </property>
+    </widget>
+    <widget class="QDoubleSpinBox" name="doubleSpinBox_nota">
+     <property name="geometry">
+      <rect>
+       <x>70</x>
+       <y>10</y>
+       <width>81</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>-1</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
+     <property name="frame">
+      <bool>true</bool>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+     <property name="buttonSymbols">
+      <enum>QAbstractSpinBox::NoButtons</enum>
+     </property>
+     <property name="maximum">
+      <double>10.000000000000000</double>
+     </property>
+    </widget>
+    <zorder>doubleSpinBox_nota</zorder>
+    <zorder>label_nota</zorder>
+   </widget>
+   <widget class="QFrame" name="frame_peso_nota">
+    <property name="geometry">
+     <rect>
+      <x>200</x>
+      <y>70</y>
+      <width>251</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::StyledPanel</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Raised</enum>
+    </property>
+    <widget class="QLabel" name="label_nota_3">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>20</y>
+       <width>141</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>-1</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
+     <property name="text">
+      <string>Peso da Nota:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+     </property>
+    </widget>
+    <widget class="QDoubleSpinBox" name="doubleSpinBox_peso_nota">
+     <property name="geometry">
+      <rect>
+       <x>160</x>
+       <y>10</y>
+       <width>81</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>-1</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
+     <property name="frame">
+      <bool>true</bool>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+     <property name="buttonSymbols">
+      <enum>QAbstractSpinBox::NoButtons</enum>
+     </property>
+     <property name="maximum">
+      <double>10.000000000000000</double>
+     </property>
+    </widget>
+    <zorder>doubleSpinBox_peso_nota</zorder>
+    <zorder>label_nota_3</zorder>
+   </widget>
+   <widget class="QPushButton" name="btn_cancelar">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>140</y>
+      <width>221</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>-1</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::LeftToRight</enum>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <property name="text">
+     <string>Cancelar</string>
+    </property>
+    <property name="default">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_salvar">
+    <property name="geometry">
+     <rect>
+      <x>240</x>
+      <y>140</y>
+      <width>221</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>-1</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::LeftToRight</enum>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <property name="text">
+     <string>Salvar</string>
+    </property>
+    <property name="default">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <zorder>btn_cancelar</zorder>
+   <zorder>btn_salvar</zorder>
+   <zorder>label_card_materia</zorder>
+   <zorder>frame_peso_nota</zorder>
+   <zorder>frame_nota</zorder>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

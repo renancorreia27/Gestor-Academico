@@ -1,0 +1,447 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>348</width>
+    <height>175</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>0</width>
+    <height>175</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>16777215</width>
+    <height>175</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string notr="true">Form</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">/* O Corpo do Card */
+QFrame {
+    /* Gradiente Vertical Sutil */
+    /* Começa Branco Puro no topo (stop:0) */
+    /* Termina num Cinza muito claro embaixo (stop:1) */
+    background-color: qlineargradient(
+        x1:0, y1:0, x2:0, y2:1,
+        stop:0 #ffffff,
+        stop:1 #f8f9fa 
+    );
+    
+    /* Mantemos a borda e o arredondamento do estilo Clean */
+    border: 1px solid #e1e1e1;
+    border-radius: 15px;
+}
+
+/* Efeito extra: Quando passa o mouse, ele fica &quot;mais alto&quot; (mais branco) */
+QFrame:hover {
+     background-color: #ffffff; /* Fica totalmente branco */
+     border-color: #bdc3c7;     /* A borda fica um pouco mais forte */
+}
+
+/* A Nota Grande (10.0) */
+QLabel#label_media {
+    color: #2ecc71;  /* O VERDE da imagem */
+    font-size: 36px; /* Bem grande */
+    font-weight: bold;
+    background-color: transparent;
+    border: none;
+}
+
+/* O Título da Matéria */
+QLabel#label_card_materia {
+    color: #000000;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: transparent;
+    border: none;
+}
+
+/* Texto pequeno (Faltas) */
+QLabel#label_faltas {
+    color: #7f8c8d; /* Cinza médio */
+    font-size: 12px;
+    background-color: transparent;
+    border: none;
+}
+
+QPushButton {
+    background-color: #ffffff; /* Fundo branco */
+    border: 2px solid rgb(231, 50, 53); /* Borda cinza */
+    border-radius: 10px;       /* METADE da altura (se o botão tiver 30px) */
+    width: 30px;
+    height: 30px;
+}
+
+QPushButton:hover {
+    border-color: rgb(231, 50, 53);
+    background-color: rgb(255, 115, 117);
+}
+
+QPushButton:pressed {
+    background-color: #2ecc71;
+    color: white;
+}</string>
+  </property>
+  <widget class="QFrame" name="frame_card_materia">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>10</y>
+     <width>351</width>
+     <height>161</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">/* =======================================================
+   1. O CARTÃO (CONTAINER)
+   ===============================================*/
+
+QFrame#frame_card_materia {
+    background-color: #FFFFFF;
+    border-radius: 20px;
+    border: 1px solid #F1F5F9; 
+    border-bottom: 2px solid #E2E8F0; 
+}
+
+/* =======================================================
+   2. TIPOGRAFIA
+   ======================================================= */
+
+/* Nome da Matéria */
+QLabel#label_card_materia {
+    color: #2D3748;         /* Cinza Chumbo */
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    font-size: 18px;
+    font-weight: 800;       /* Extra Bold */
+    background: transparent;
+}
+
+/* Nota (Média) - DESTAQUE */
+QLabel#label_media {
+    color: #48BB78;
+    font-size: 32px;        /* Bem grande */
+    font-weight: bold;
+    background: transparent;
+}
+
+/* Texto de Faltas */
+QLabel#label_faltas {
+    color: #A0AEC0;         /* Cinza claro discreto */
+    font-size: 13px;
+    font-weight: 600;
+    background: transparent;
+}
+
+/* =======================================================
+   3. BARRAS DE PROGRESSO (CAPSULE STYLE)
+   ======================================================= */
+QProgressBar {
+    background-color: #EDF2F7; /* Fundo do trilho cinza claro */
+    border: none;
+    border-radius: 4px;        /* Pontas arredondadas */
+    text-align: center;
+}
+
+QProgressBar::chunk {
+    border-radius: 4px;        /* O preenchimento também é redondo */
+}
+
+/* Barra de Notas (Verde Sucesso) */
+QProgressBar#progressBar_media::chunk {
+    background-color: #48BB78; 
+}
+
+/* Barra de Faltas (Vermelho Alerta) */
+QProgressBar#progressBar_falta::chunk {
+    background-color: #F56565; 
+}
+
+/* =======================================================
+   4. BOTÕES DE AÇÃO (SOFT BUTTONS)
+   ======================================================= */
+
+/* -- Botão Adicionar Nota (Verde) -- */
+QPushButton#btn_add_nota {
+    background-color: #F0FFF4; /* Verde muito pálido */
+    border: 1px solid #C6F6D5;
+    border-radius: 12px;       /* Squircle (Quadrado arredondado) */
+}
+
+QPushButton#btn_add_nota:hover {
+    background-color: #C6F6D5; /* Verde um pouco mais forte */
+    border: 1px solid #48BB78;
+}
+
+QPushButton#btn_add_nota:pressed {
+    background-color: #48BB78;
+    border: none;
+}
+
+/* -- Botão Adicionar Falta (Laranja/Vermelho) -- */
+QPushButton#btn_add_falta {
+    background-color: #FFF5F5; /* Vermelho muito pálido */
+    border: 1px solid #FED7D7;
+    border-radius: 12px;
+}
+
+QPushButton#btn_add_falta:hover {
+    background-color: #FED7D7;
+    border: 1px solid #F56565;
+}
+
+QPushButton#btn_add_falta:pressed {
+    background-color: #F56565;
+    border: none;
+}
+
+/* -- Botão Deletar/Fechar (Canto Superior Direito) -- */
+/* Nota: O nome no seu XML é btn_add_falta_2, estou usando ele aqui */
+QPushButton#btn_add_falta_2 {
+    background-color: transparent;
+    border: none;
+    border-radius: 10px;
+}
+
+QPushButton#btn_add_falta_2:hover {
+    background-color: #FED7D7; /* Fundo vermelho suave ao passar o mouse */
+    border: 1px solid #F56565;
+}
+
+QPushButton#btn_add_falta_2:pressed {
+    background-color: #F56565;
+}</string>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::NoFrame</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Raised</enum>
+   </property>
+   <property name="lineWidth">
+    <number>0</number>
+   </property>
+   <widget class="QLabel" name="label_card_materia">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>10</y>
+      <width>331</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Segoe UI,sans-serif</family>
+      <pointsize>-1</pointsize>
+      <weight>99</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <property name="text">
+     <string>Matéria X</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_media">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>40</y>
+      <width>181</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>-1</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <property name="text">
+     <string>10.0</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_faltas">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>110</y>
+      <width>141</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>-1</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <property name="text">
+     <string>Faltas: 0/15</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_add_nota">
+    <property name="geometry">
+     <rect>
+      <x>240</x>
+      <y>110</y>
+      <width>41</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>../Assets/Icons/Add_nota_icon.png</normaloff>../Assets/Icons/Add_nota_icon.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>48</width>
+      <height>48</height>
+     </size>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_add_falta">
+    <property name="geometry">
+     <rect>
+      <x>290</x>
+      <y>110</y>
+      <width>41</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>../Assets/Icons/Add_falta_icon.png</normaloff>../Assets/Icons/Add_falta_icon.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>28</width>
+      <height>28</height>
+     </size>
+    </property>
+   </widget>
+   <widget class="QProgressBar" name="progressBar_media">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>80</y>
+      <width>291</width>
+      <height>7</height>
+     </rect>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>16777215</width>
+      <height>7</height>
+     </size>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <property name="maximum">
+     <number>10</number>
+    </property>
+    <property name="value">
+     <number>10</number>
+    </property>
+    <property name="textVisible">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QProgressBar" name="progressBar_falta">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>130</y>
+      <width>141</width>
+      <height>7</height>
+     </rect>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>16777215</width>
+      <height>7</height>
+     </size>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <property name="maximum">
+     <number>15</number>
+    </property>
+    <property name="value">
+     <number>15</number>
+    </property>
+    <property name="textVisible">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_add_falta_2">
+    <property name="geometry">
+     <rect>
+      <x>310</x>
+      <y>10</y>
+      <width>31</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::LeftToRight</enum>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>../Assets/Icons/Cross_icon.png</normaloff>../Assets/Icons/Cross_icon.png</iconset>
+    </property>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
