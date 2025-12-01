@@ -3,6 +3,8 @@ from PyQt6 import uic
 from .janelas_extras import DialogAdicionarNota
 from .janelas_extras import DialogAdicionarFalta
 
+from banco_dados import BancoDados #para linkar o banco de dados no futuro
+
 class CardMateria(QWidget):
     def __init__(self, nome_materia, media, faltas, faltas_max):
         super().__init__()

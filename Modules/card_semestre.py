@@ -1,6 +1,8 @@
 from PyQt6.QtWidgets import QWidget
 from PyQt6 import uic
 
+from banco_dados import BancoDados #para linkar o banco de dados no futuro
+
 class CardSemestre(QWidget):
     def __init__(self, nome_semestre, situacao):
         super().__init__()

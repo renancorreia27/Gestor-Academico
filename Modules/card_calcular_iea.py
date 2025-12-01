@@ -2,6 +2,8 @@ from PyQt6.QtWidgets import QDialog
 from PyQt6.QtCore import Qt
 from PyQt6 import uic
 
+from banco_dados import BancoDados #para linkar o banco de dados no futuro
+
 class DialogCalcularIEA(QDialog):
     def __init__(self):
         super().__init__()
