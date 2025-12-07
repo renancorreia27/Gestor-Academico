@@ -1,0 +1,20 @@
+{
+    "materias": [],
+    "semestres": [
+        {
+            "nome": "1\u00ba Semestre",
+            "situacao": "Finalizado"
+        },
+        {
+            "nome": "2\u00ba Semestre",
+            "situacao": "Em Andamento"
+        }
+    ],
+    "usuario": {
+        "nome": "Usu\u00e1rio Padr\u00e3o",
+        "matricula": "000000",
+        "iea": 0.0,
+        "semestres_totais": 8,
+        "semestres_cursados": 0
+    }
+}
