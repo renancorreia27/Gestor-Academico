@@ -261,6 +261,9 @@ QPushButton#btn_cancelar:pressed {
      <property name="buttonSymbols">
       <enum>QAbstractSpinBox::NoButtons</enum>
      </property>
+     <property name="specialValueText">
+      <string> </string>
+     </property>
     </widget>
     <zorder>spinBox_falta</zorder>
     <zorder>label_falta</zorder>

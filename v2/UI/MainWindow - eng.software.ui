@@ -496,7 +496,7 @@ QWidget#scrollArea_semestre_conteudo{
      </font>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>3</number>
     </property>
     <widget class="QWidget" name="dashboard_principal">
      <property name="font">
@@ -927,8 +927,14 @@ QScrollArea &gt; QScrollBar::sub-page:vertical {
            <property name="enabled">
             <bool>true</bool>
            </property>
+           <property name="inputMethodHints">
+            <set>Qt::ImhNone</set>
+           </property>
            <property name="frame">
             <bool>true</bool>
+           </property>
+           <property name="placeholderText">
+            <string>Ex: Mariana Souza</string>
            </property>
           </widget>
          </item>
@@ -957,6 +963,9 @@ QScrollArea &gt; QScrollBar::sub-page:vertical {
              <width>16777215</width>
              <height>16777215</height>
             </size>
+           </property>
+           <property name="placeholderText">
+            <string>Ex: Medicina</string>
            </property>
           </widget>
          </item>
@@ -1019,6 +1028,9 @@ QScrollArea &gt; QScrollBar::sub-page:vertical {
            <property name="buttonSymbols">
             <enum>QAbstractSpinBox::NoButtons</enum>
            </property>
+           <property name="specialValueText">
+            <string> </string>
+           </property>
            <property name="minimum">
             <number>0</number>
            </property>
@@ -1052,6 +1064,9 @@ QScrollArea &gt; QScrollBar::sub-page:vertical {
            </property>
            <property name="buttonSymbols">
             <enum>QAbstractSpinBox::NoButtons</enum>
+           </property>
+           <property name="specialValueText">
+            <string> </string>
            </property>
            <property name="minimum">
             <number>0</number>
@@ -1226,6 +1241,9 @@ QScrollArea &gt; QScrollBar::sub-page:vertical {
            <property name="frame">
             <bool>true</bool>
            </property>
+           <property name="placeholderText">
+            <string>Ex: Cálculo I</string>
+           </property>
           </widget>
          </item>
          <item row="1" column="0">
@@ -1314,6 +1332,9 @@ QScrollArea &gt; QScrollBar::sub-page:vertical {
            <property name="buttonSymbols">
             <enum>QAbstractSpinBox::NoButtons</enum>
            </property>
+           <property name="specialValueText">
+            <string> </string>
+           </property>
           </widget>
          </item>
          <item row="2" column="1">
@@ -1330,6 +1351,9 @@ QScrollArea &gt; QScrollBar::sub-page:vertical {
            <property name="buttonSymbols">
             <enum>QAbstractSpinBox::NoButtons</enum>
            </property>
+           <property name="specialValueText">
+            <string> </string>
+           </property>
           </widget>
          </item>
          <item row="1" column="1">
@@ -1345,6 +1369,9 @@ QScrollArea &gt; QScrollBar::sub-page:vertical {
            </property>
            <property name="buttonSymbols">
             <enum>QAbstractSpinBox::NoButtons</enum>
+           </property>
+           <property name="specialValueText">
+            <string> </string>
            </property>
            <property name="maximum">
             <number>99999</number>
@@ -1364,6 +1391,9 @@ QScrollArea &gt; QScrollBar::sub-page:vertical {
            </property>
            <property name="buttonSymbols">
             <enum>QAbstractSpinBox::NoButtons</enum>
+           </property>
+           <property name="specialValueText">
+            <string> </string>
            </property>
            <property name="maximum">
             <double>10.000000000000000</double>

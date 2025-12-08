@@ -250,6 +250,9 @@ QPushButton#btn_cancelar:pressed {
      <property name="buttonSymbols">
       <enum>QAbstractSpinBox::NoButtons</enum>
      </property>
+     <property name="specialValueText">
+      <string> </string>
+     </property>
      <property name="maximum">
       <double>10.000000000000000</double>
      </property>
@@ -334,6 +337,9 @@ QPushButton#btn_cancelar:pressed {
      </property>
      <property name="buttonSymbols">
       <enum>QAbstractSpinBox::NoButtons</enum>
+     </property>
+     <property name="specialValueText">
+      <string> </string>
      </property>
      <property name="maximum">
       <double>10.000000000000000</double>
