@@ -1,12 +1,11 @@
-from PyQt6.QtWidgets import QWidget
+from PyQt6.QtWidgets import QWidget, QPushButton
 from PyQt6 import uic
-from .janelas_extras import DialogAdicionarNota
-from .janelas_extras import DialogAdicionarFalta
-
-from banco_dados import BancoDados #para linkar o banco de dados no futuro
+from .janelas_extras import DialogAdicionarNota, DialogAdicionarFalta, DialogConfirmarExclusao
+from banco_dados import BancoDados 
 
 class CardMateria(QWidget):
-    def __init__(self, nome_materia, media, faltas, faltas_max):
+    def __init__(self, nome_materia, media, faltas, faltas_max, media_necessaria, parent_window):
+        
         super().__init__()
         try:
             uic.loadUi("UI/Widget - card.materia.ui", self)
@@ -14,43 +13,58 @@ class CardMateria(QWidget):
             uic.loadUi("Widget - card.materia.ui", self)
 
         self.nome_materia_atual = nome_materia
+        self.parent_window = parent_window # Janela Principal
         
-        # Preenchimento visual
+        # --- Visual ---
         self.label_card_materia.setText(nome_materia)
-        self.label_media.setText(str(media))
-        self.label_faltas.setText(f"Faltas: {faltas}/{faltas_max}")
+        self.label_media.setText(f"{media:.1f}") 
+        self.label_faltas.setText(f"{faltas}/{faltas_max}")
 
-        # Barras de Progresso
-        self.progressBar_media.setMaximum(100) 
-        self.progressBar_media.setValue(int(float(media) * 10)) # Ex: 7.5 vira 75%
+        # Barras
+        self.progressBar_media.setValue(int(media * 10))
+        if media >= media_necessaria:
+            self.progressBar_media.setStyleSheet("QProgressBar::chunk { background-color: #2ecc71; }")
+            self.progressBar_media.setToolTip(f"Aprovado! Meta: {media_necessaria}")
+        else:
+            self.progressBar_media.setStyleSheet("QProgressBar::chunk { background-color: #f1c40f; }")
+            self.progressBar_media.setToolTip(f"Meta: {media_necessaria}")
 
         self.progressBar_falta.setMaximum(faltas_max)
         self.progressBar_falta.setValue(faltas)
+        if faltas > faltas_max:
+            self.progressBar_falta.setValue(faltas_max)
 
-        # Botões
+        # --- Conexões ---
         self.btn_add_nota.clicked.connect(self.clicar_add_nota)
         self.btn_add_falta.clicked.connect(self.clicar_add_falta)
+        
+        if hasattr(self, 'btn_delete_materia'):
+            self.btn_delete_materia.clicked.connect(self.clicar_remover_materia)
+
+        if hasattr(self, 'btn_editar'):
+            self.btn_editar.clicked.connect(self.clicar_editar_materia)
 
     def clicar_add_nota(self):
-        """ Abre modal de notas e envia para o backend """
         dialog = DialogAdicionarNota(self.nome_materia_atual)
-        
-        if dialog.exec(): # Se o usuário clicou em Salvar
-            dados = dialog.get_dados()
-            nota = dados["nota"]
-            peso = dados["peso"]
-
-            # Lógica de Persistência
-            print(f"[BACKEND] Inserir Nota -> Matéria: {self.nome_materia_atual} | Nota: {nota} | Peso: {peso}")
-            # Sugestão: Após salvar, recalcular a média da matéria e atualizar a tela
+        if dialog.exec():
+            d = dialog.get_dados()
+            if BancoDados.adicionar_nota_materia(self.nome_materia_atual, d["nota"], d["peso"], d["descricao"]):
+                self.parent_window.recarregar_dashboard() 
 
     def clicar_add_falta(self):
-        """ Abre modal de faltas e envia para o backend """
         dialog = DialogAdicionarFalta(self.nome_materia_atual)
-        
         if dialog.exec():
-            dados = dialog.get_dados()
-            qtd_faltas = dados["falta"]
-            
-            # Lógica de Persistência
-            print(f"[BACKEND] Somar Faltas -> Matéria: {self.nome_materia_atual} | +{qtd_faltas} faltas")
+            d = dialog.get_dados()
+            if BancoDados.adicionar_falta_materia(self.nome_materia_atual, d["falta"]):
+                self.parent_window.recarregar_dashboard()
+                
+    def clicar_remover_materia(self):
+        dialog = DialogConfirmarExclusao(self.nome_materia_atual)
+        if dialog.exec():
+            if BancoDados.deletar_materia(self.nome_materia_atual):
+                self.deleteLater() 
+                self.parent_window.recarregar_dashboard()
+
+    def clicar_editar_materia(self):
+        # Chama a função na janela principal para trocar de tela e preencher dados
+        self.parent_window.abrir_tela_edicao(self.nome_materia_atual)

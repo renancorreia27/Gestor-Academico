@@ -205,21 +205,37 @@ QPushButton#btn_add_falta:pressed {
 }
 
 /* -- Botão Deletar/Fechar (Canto Superior Direito) -- */
-/* Nota: O nome no seu XML é btn_add_falta_2, estou usando ele aqui */
-QPushButton#btn_add_falta_2 {
+QPushButton#btn_delete_materia {
     background-color: transparent;
     border: none;
     border-radius: 10px;
 }
 
-QPushButton#btn_add_falta_2:hover {
+QPushButton#btn_delete_materia:hover {
     background-color: #FED7D7; /* Fundo vermelho suave ao passar o mouse */
     border: 1px solid #F56565;
 }
 
-QPushButton#btn_add_falta_2:pressed {
+QPushButton#btn_delete_materia:pressed {
     background-color: #F56565;
-}</string>
+}
+
+QPushButton#btn_editar {
+    background-color: transparent;
+    border: none;
+    border-radius: 10px;
+}
+
+QPushButton#btn_editar:hover {
+    background-color: rgb(223, 223, 221); /* Fundo vermelho suave ao passar o mouse */
+}
+
+QPushButton#btn_editar:pressed {
+    background-color: rgb(212, 212, 212);
+}
+
+
+</string>
    </property>
    <property name="frameShape">
     <enum>QFrame::NoFrame</enum>
@@ -414,7 +430,7 @@ QPushButton#btn_add_falta_2:pressed {
      <bool>false</bool>
     </property>
    </widget>
-   <widget class="QPushButton" name="btn_add_falta_2">
+   <widget class="QPushButton" name="btn_delete_materia">
     <property name="geometry">
      <rect>
       <x>310</x>
@@ -438,6 +454,38 @@ QPushButton#btn_add_falta_2:pressed {
     <property name="icon">
      <iconset>
       <normaloff>../Assets/Icons/Cross_icon.png</normaloff>../Assets/Icons/Cross_icon.png</iconset>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_editar">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>10</y>
+      <width>31</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::LeftToRight</enum>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>../Assets/Icons/editar_icon.png</normaloff>../Assets/Icons/editar_icon.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>28</width>
+      <height>28</height>
+     </size>
     </property>
    </widget>
   </widget>

@@ -188,7 +188,7 @@ QPushButton#btn_cancelar:pressed {
      <rect>
       <x>150</x>
       <y>60</y>
-      <width>171</width>
+      <width>181</width>
       <height>61</height>
      </rect>
     </property>
@@ -238,7 +238,7 @@ QPushButton#btn_cancelar:pressed {
       <rect>
        <x>90</x>
        <y>10</y>
-       <width>61</width>
+       <width>81</width>
        <height>41</height>
       </rect>
      </property>

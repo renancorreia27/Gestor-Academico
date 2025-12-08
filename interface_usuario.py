@@ -4,10 +4,10 @@ from PyQt6.QtWidgets import QApplication
 from janela_principal import JanelaPrincipal
 
 class InterfaceUsuario:
+    @staticmethod
     def menuInicial():
-        # Cria a instância da aplicação
+        """ Inicializa a aplicação gráfica. """
         app = QApplication(sys.argv)
-        # Cria e exibe a janela principal
-        window = JanelaPrincipal()
-        window.show()
+        janela = JanelaPrincipal()
+        janela.show()
         sys.exit(app.exec())

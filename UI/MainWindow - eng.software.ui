@@ -244,6 +244,8 @@ QPushButton#btn_usuario {
     border: 1px solid #E2E8F0;
     border-radius: 20px;
     font-weight: 600;
+	margin-left:3px;
+	margin-right:3px;
 }
 QPushButton#btn_usuario:hover {
     border: 1px solid #667EEA;
@@ -496,7 +498,7 @@ QWidget#scrollArea_semestre_conteudo{
      </font>
     </property>
     <property name="currentIndex">
-     <number>3</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="dashboard_principal">
      <property name="font">
@@ -521,7 +523,9 @@ QWidget#scrollArea_semestre_conteudo{
        </font>
       </property>
       <property name="styleSheet">
-       <string notr="true"/>
+       <string notr="true">QscrollArea#scrollArea_materias{
+background-color: rgba(255, 255, 255, 0);
+}</string>
       </property>
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>
@@ -607,7 +611,7 @@ QWidget#scrollArea_semestre_conteudo{
         <string notr="true">/* Fundo da ScrollArea (O conteiner geral) */
 QScrollArea {
     border: none;
-    background-color: transparent; /* Tente transparent para nao conflitar */
+    background-color: rgba(255, 255, 255, 0); /* Tente transparent para nao conflitar */
 }
 
 /* O fundo da barra de rolagem (o trilho) */
@@ -655,6 +659,9 @@ QScrollArea &gt; QScrollBar::sub-page:vertical {
           <width>771</width>
           <height>551</height>
          </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true"/>
         </property>
        </widget>
       </widget>
@@ -709,39 +716,6 @@ QScrollArea &gt; QScrollBar::sub-page:vertical {
         <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
        </property>
       </widget>
-      <widget class="QPushButton" name="btn_salvar_semestre">
-       <property name="geometry">
-        <rect>
-         <x>560</x>
-         <y>580</y>
-         <width>221</width>
-         <height>51</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <family>Segoe UI,Verdana,sans-serif</family>
-         <pointsize>-1</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="cursor">
-        <cursorShape>PointingHandCursor</cursorShape>
-       </property>
-       <property name="layoutDirection">
-        <enum>Qt::LeftToRight</enum>
-       </property>
-       <property name="styleSheet">
-        <string notr="true"/>
-       </property>
-       <property name="text">
-        <string>Salvar</string>
-       </property>
-       <property name="default">
-        <bool>false</bool>
-       </property>
-      </widget>
       <widget class="QPushButton" name="btn_add_semestre">
        <property name="geometry">
         <rect>
@@ -780,9 +754,9 @@ QScrollArea &gt; QScrollBar::sub-page:vertical {
       <widget class="QScrollArea" name="scrollArea_semestre">
        <property name="geometry">
         <rect>
-         <x>30</x>
-         <y>90</y>
-         <width>761</width>
+         <x>20</x>
+         <y>80</y>
+         <width>771</width>
          <height>451</height>
         </rect>
        </property>
@@ -798,7 +772,7 @@ QScrollArea &gt; QScrollBar::sub-page:vertical {
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>761</width>
+          <width>771</width>
           <height>451</height>
          </rect>
         </property>
