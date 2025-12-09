@@ -48,7 +48,7 @@ class CardMateria(QWidget):
         dialog = DialogAdicionarNota(self.nome_materia_atual)
         if dialog.exec():
             d = dialog.get_dados()
-            if BancoDados.adicionar_nota_materia(self.nome_materia_atual, d["nota"], d["peso"], d["descricao"]):
+            if BancoDados.adicionar_nota_materia(self.nome_materia_atual, d["nota"], d["peso"]):
                 self.parent_window.recarregar_dashboard() 
 
     def clicar_add_falta(self):

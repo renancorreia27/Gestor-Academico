@@ -98,10 +98,10 @@ class DialogCalcularIEA(QDialog):
 
     def realizar_calculo(self):
         resultados = BancoDados.calcular_iea_geral()
-        if hasattr(self, 'label_iech'): self.label_iech.setText(f"{resultados['IECH']:.2f}")
-        if hasattr(self, 'label_iepl'): self.label_iepl.setText(f"{resultados['IEPL']:.2f}")
+        if hasattr(self, 'label_iech'): self.label_iech.setText(f"IECH = {resultados['IECH']:.2f}")
+        if hasattr(self, 'label_iepl'): self.label_iepl.setText(f"IEPL = {resultados['IEPL']:.2f}")
         
-        texto_iea = f"{resultados['IEA']:.2f}"
+        texto_iea = f"IEA = {resultados['IEA']:.2f}"
         if hasattr(self, 'label_iea_resultado'): self.label_iea_resultado.setText(texto_iea)
         elif hasattr(self, 'label_iea'): self.label_iea.setText(texto_iea)
 

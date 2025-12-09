@@ -32,7 +32,7 @@ class BancoDados:
                     
                     BancoDados.lista_materias = []
                     for m in dados.get("materias", []):
-                        notas_objs = [Nota(n['valor'], n['peso'], n['descricao']) for n in m.get('notas', [])]
+                        notas_objs = [Nota(n['valor'], n['peso']) for n in m.get('notas', [])]
                         semestre_m = m.get('semestre', "1º Semestre")
                         
                         nova_mat = Materia(
@@ -147,10 +147,10 @@ class BancoDados:
         return False
 
     @staticmethod
-    def adicionar_nota_materia(nome_materia, valor, peso, descricao):
+    def adicionar_nota_materia(nome_materia, valor, peso):
         for m in BancoDados.lista_materias:
             if m.nome == nome_materia:
-                m.adicionar_nota(Nota(valor, peso, descricao))
+                m.adicionar_nota(Nota(valor, peso))
                 BancoDados._salvar_dados()
                 return True
         return False

@@ -1,19 +1,17 @@
 class Nota:
-    def __init__(self, valor: float, peso: float, descricao: str):
+    def __init__(self, valor: float, peso: float):
         self.valor = valor
         self.peso = peso
-        self.descricao = descricao
     
     def to_dict(self):
-        return {"valor": self.valor, "peso": self.peso, "descricao": self.descricao}
+        return {"valor": self.valor, "peso": self.peso}
 
 class Falta:
-    def __init__(self, quantidade: int, data: str):
+    def __init__(self, quantidade: int):
         self.quantidade = quantidade
-        self.data = data
 
     def to_dict(self):
-        return {"quantidade": self.quantidade, "data": self.data}
+        return {"quantidade": self.quantidade}
 
 class Materia:
     def __init__(self, nome: str, semestre: str, carga_horaria: int, media: float = 0.0, faltas: int = 0, max_faltas: int = 0, media_necessaria: float = 7.0, notas: list = None):
