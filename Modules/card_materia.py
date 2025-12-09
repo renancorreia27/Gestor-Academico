@@ -13,7 +13,7 @@ class CardMateria(QWidget):
             uic.loadUi("Widget - card.materia.ui", self)
 
         self.nome_materia_atual = nome_materia
-        self.parent_window = parent_window # Janela Principal
+        self.parent_window = parent_window
         
         # --- Visual ---
         self.label_card_materia.setText(nome_materia)

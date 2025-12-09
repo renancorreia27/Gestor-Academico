@@ -4,7 +4,6 @@ from PyQt6 import uic
 
 from Modules.card_materia import CardMateria
 from Modules.card_semestre import CardSemestre
-# ADICIONADO: DialogConfirmarExclusao
 from Modules.janelas_extras import DialogCalcularIEA, DialogConfirmarExclusao 
 from banco_dados import BancoDados
 

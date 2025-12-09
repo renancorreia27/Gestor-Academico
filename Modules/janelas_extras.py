@@ -110,7 +110,7 @@ class DialogCalcularIEA(QDialog):
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
 
 
-# --- DIALOGS VIA CÓDIGO (Para evitar erros de arquivo .ui faltando) ---
+# --- DIALOGS VIA CÓDIGO---
 
 class DialogConfirmarExclusao(QDialog):
     def __init__(self, item_nome):
@@ -150,7 +150,6 @@ class DialogConfirmarExclusao(QDialog):
         self.btn_confirmar.clicked.connect(self.accept)
         self.btn_cancelar.clicked.connect(self.reject)
         
-        # Remove barra de título do Windows para ficar igual ao estilo do app
         self.setWindowFlags(Qt.WindowType.FramelessWindowHint)
 
     def get_dados(self):
