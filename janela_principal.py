@@ -1,6 +1,7 @@
-from PyQt6.QtWidgets import QMainWindow, QGridLayout, QVBoxLayout, QWidget, QStackedWidget, QMessageBox
+from PyQt6.QtWidgets import QMainWindow, QGridLayout, QWidget, QStackedWidget, QMessageBox
 from PyQt6.QtCore import Qt
 from PyQt6 import uic
+from PyQt6.QtGui import QIcon
 
 from Modules.card_materia import CardMateria
 from Modules.card_semestre import CardSemestre
@@ -18,6 +19,7 @@ def resource_path(relative_path):
     return os.path.join(base_path, relative_path)
 
 class JanelaPrincipal(QMainWindow):
+    
     "Controlador principal do programa, tem a função de controlar todas as janelas"
     def __init__(self):
         super().__init__()
@@ -25,7 +27,8 @@ class JanelaPrincipal(QMainWindow):
             uic.loadUi(resource_path("UI/MainWindow - eng.software.ui"), self)
         except:
             uic.loadUi("MainWindow - eng.software.ui", self)
-            
+        
+        self.setWindowIcon(QIcon(resource_path("Assets/Icons/Icon-app.ico")))
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
         self.materia_em_edicao = None 
         
