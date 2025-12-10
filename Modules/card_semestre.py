@@ -5,6 +5,7 @@ from banco_dados import BancoDados
 import os
 
 class CardSemestre(QWidget):
+    """Widget reponsável por exibir status, Gerenciar Semestres e permitir a alteração do status"""
     def __init__(self, nome_semestre, situacao, parent_window):
         super().__init__()
         
@@ -16,7 +17,7 @@ class CardSemestre(QWidget):
         self.parent_window = parent_window 
         self.situacao_atual = situacao
         
-        # Visual básico
+        # Carrega UI
         ui_carregado = False
         caminhos_tentativa = [
             "UI/Widget - card.semestre.ui",
@@ -60,13 +61,13 @@ class CardSemestre(QWidget):
         
         self.atualizar_interface(situacao)
 
-        # Complementar conexões
+        # Complementar conexões de botões de status
         if hasattr(self, 'btn_iniciar_semestre'): 
             self.btn_iniciar_semestre.clicked.connect(self.marcar_em_andamento)
         if hasattr(self, 'btn_finaliza_semestre'): 
             self.btn_finaliza_semestre.clicked.connect(self.marcar_finalizado)
         
-        # Busca botão de deletar
+        # Conexão do botão de deletar
         btn_del = getattr(self, 'btn_delete_semestre', None)
         if not btn_del:
             for btn in self.findChildren(QPushButton):
@@ -78,18 +79,22 @@ class CardSemestre(QWidget):
             btn_del.clicked.connect(self.clicar_excluir)
 
     def marcar_em_andamento(self):
+        """Atualiza o status do semestre para 'em andamento' no banco_dados e UI """
         if BancoDados.atualizar_status_semestre(self.nome, "Em Andamento"):
             self.atualizar_interface("Em Andamento")
 
     def marcar_finalizado(self):
+        """Atualiza o status do semestre para 'finalizado' no banco_dados e UI """
         if BancoDados.atualizar_status_semestre(self.nome, "Finalizado"):
             self.atualizar_interface("Finalizado")
 
     def clicar_excluir(self):
+        """Pergunta na tela principal a confirmação de exclusão do semestre"""
         if hasattr(self.parent_window, 'excluir_semestre_especifico'):
             self.parent_window.excluir_semestre_especifico(self.nome)
 
     def atualizar_interface(self, situacao):
+        """Controla os botões de ação como cor e status"""
         if hasattr(self, 'label_situacao'):
             self.label_situacao.setText(situacao)
             

@@ -8,6 +8,7 @@ from Modules.janelas_extras import DialogCalcularIEA, DialogConfirmarExclusao
 from banco_dados import BancoDados
 
 class JanelaPrincipal(QMainWindow):
+    "Controlador principal do programa, tem a função de controlar todas as janelas"
     def __init__(self):
         super().__init__()
         try:
@@ -27,6 +28,7 @@ class JanelaPrincipal(QMainWindow):
         self.carregar_semestres() 
 
     def setup_ui(self):
+        """Conecta os clicks nos butões com as funções corretas"""
         self.stack = self.findChild(QStackedWidget, "pages") or self.stackedWidget
         
         # Navegação
@@ -63,6 +65,7 @@ class JanelaPrincipal(QMainWindow):
 
 
     def carregar_dados_usuario(self):
+        """Carrega os dados do usuário do banco_dados"""
         u = BancoDados.get_usuario()
         if hasattr(self, 'nomeDeUsuarioLineEdit'): self.nomeDeUsuarioLineEdit.setText(u.nome)
         if hasattr(self, 'nomeDoCursoLineEdit'): self.nomeDoCursoLineEdit.setText(u.curso)
@@ -74,6 +77,7 @@ class JanelaPrincipal(QMainWindow):
             self.btn_usuario.setText(txt)
 
     def salvar_configuracoes(self):
+        """Salva as configurações do usuário no banco_dados"""
         nome = self.nomeDeUsuarioLineEdit.text()
         curso = self.nomeDoCursoLineEdit.text()
         carga = self.cargaHorariaDoCursoSpinBox.value()
@@ -95,10 +99,12 @@ class JanelaPrincipal(QMainWindow):
     
 
     def abrir_tela_semestres(self):
+        """Entra na tela de semestres"""
         self.mudar_pagina(1)
         self.carregar_semestres() 
 
     def carregar_semestres(self):
+        """Cria e redimensiona o CardSemestre para seu respectivo semestre"""
         if not hasattr(self, 'scrollArea_semestre'): return
 
         novo_container = QWidget()
@@ -122,6 +128,7 @@ class JanelaPrincipal(QMainWindow):
         self.scrollArea_semestre.setWidgetResizable(True)
 
     def adicionar_novo_semestre(self):
+        """Cria um novo semestre na UI"""
         nome = BancoDados.criar_proximo_semestre()
         self.atualizar_combo_semestres()
         self.carregar_semestres()
@@ -146,6 +153,7 @@ class JanelaPrincipal(QMainWindow):
                 self.recarregar_dashboard()
 
     def atualizar_combo_semestres(self):
+        """Prenche o QcomboBox com semestres disponíveis"""
         if not hasattr(self, 'comboBox_semestre'): return
         self.comboBox_semestre.blockSignals(True)
         self.comboBox_semestre.clear()
@@ -158,6 +166,7 @@ class JanelaPrincipal(QMainWindow):
 
 
     def preparar_novo_cadastro(self):
+        """Prepara tela para entrada de dados de uma nova matéria"""
         self.materia_em_edicao = None 
         if hasattr(self, 'nomeDaMateria_lineEdit'): self.nomeDaMateria_lineEdit.clear()
         if hasattr(self, 'cargaHoraria_spinBox'): self.cargaHoraria_spinBox.setValue(0)
@@ -165,6 +174,7 @@ class JanelaPrincipal(QMainWindow):
         self.mudar_pagina(3)
 
     def abrir_tela_edicao(self, nome_materia):
+        """Permite a alteração de matérias existentes"""
         m = BancoDados.get_materia(nome_materia)
         if not m: return
         self.materia_em_edicao = nome_materia 
@@ -181,6 +191,7 @@ class JanelaPrincipal(QMainWindow):
         self.mudar_pagina(3)
 
     def salvar_materia(self):
+        """Salva uma nova matéria ou modificações no banco_dados"""
         nome = self.nomeDaMateria_lineEdit.text()
         carga = self.cargaHoraria_spinBox.value()
         try: max_faltas = getattr(self, "limiteFaltas_spinBox", getattr(self, "limiteFatlas_spinBox")).value()
@@ -205,6 +216,7 @@ class JanelaPrincipal(QMainWindow):
         self.carregar_dashboard()
 
     def carregar_dashboard(self):
+        """Cria e redimensiona o CardMateria para cada semestre"""
         if not hasattr(self, 'scrollArea_materias'): return
 
         novo_container = QWidget()

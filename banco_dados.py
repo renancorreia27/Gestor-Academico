@@ -5,6 +5,7 @@ from modelos import Usuario, Semestre, Materia, Nota
 ARQUIVO_DADOS = "dados_sistema.json"
 
 class BancoDados:
+    """Aqui é onde ocorre a persistência dos dados"""
     lista_materias = []
     lista_semestres = []
     info_usuario = Usuario(nome="Estudante", curso="Engenharia", carga_horaria_total=3600, semestres_totais=8)
@@ -25,6 +26,7 @@ class BancoDados:
 
     @staticmethod
     def fazPreCadastro():
+        """Carrega os dados do JSON ou cria novos"""
         if os.path.exists(ARQUIVO_DADOS):
             try:
                 with open(ARQUIVO_DADOS, 'r', encoding='utf-8') as f:
@@ -73,27 +75,32 @@ class BancoDados:
     # Getters
     @staticmethod
     def get_materias(filtro_semestre=None):
+        """Retorna a lista completa de matérias por semestre"""
         if filtro_semestre is None: return BancoDados.lista_materias
         return [m for m in BancoDados.lista_materias if m.semestre == filtro_semestre]
 
     @staticmethod
     def get_materia(nome_materia):
+        """Retorna um objeto materia"""
         for m in BancoDados.lista_materias:
             if m.nome == nome_materia: return m
         return None
 
     @staticmethod
     def get_semestres():
+        """Retorna todos os semestres"""
         return BancoDados.lista_semestres
 
     @staticmethod
     def get_usuario():
+        """Retornaa objeto usuario e suas configurações"""
         return BancoDados.info_usuario
 
     # Métodos
 
     @staticmethod
     def criar_proximo_semestre():
+        """Cria um objeto semestre novo, somando o número do anterior (semestre 2 = semestre 1 + 1)"""
         qtd = len(BancoDados.lista_semestres)
         nome = f"{qtd + 1}º Semestre"
         BancoDados.lista_semestres.append(Semestre(nome, "Não Iniciado"))
@@ -102,6 +109,7 @@ class BancoDados:
 
     @staticmethod
     def deletar_semestre(nome_semestre):
+        """Remove o semestre e exclui as matérias relacionadas"""
         BancoDados.lista_materias = [m for m in BancoDados.lista_materias if m.semestre != nome_semestre]
         for i, s in enumerate(BancoDados.lista_semestres):
             if s.nome == nome_semestre:
@@ -112,6 +120,7 @@ class BancoDados:
 
     @staticmethod
     def atualizar_status_semestre(nome_semestre, novo_status):
+        """Atualiza o status do semestre EX:(Em andamento / Finalizado"""
         for s in BancoDados.lista_semestres:
             if s.nome == nome_semestre:
                 s.situacao = novo_status
@@ -121,12 +130,14 @@ class BancoDados:
 
     @staticmethod
     def adicionar_materia(nome, semestre, carga, max_faltas, media_nec):
+        """Cria uma nova matéria na lista"""
         nova = Materia(nome, semestre, carga, 0.0, 0, max_faltas, media_nec)
         BancoDados.lista_materias.append(nova)
         BancoDados._salvar_dados()
 
     @staticmethod
     def editar_materia(nome_antigo, novo_nome, nova_carga, novo_max_faltas, nova_media_nec):
+        """Edita os dados de uma matéria já criada buscando pelo nome"""
         for m in BancoDados.lista_materias:
             if m.nome == nome_antigo:
                 m.nome = novo_nome
@@ -139,6 +150,7 @@ class BancoDados:
     
     @staticmethod
     def deletar_materia(nome_materia):
+        """Delete a matéria e os dados vinculados"""
         for i, m in enumerate(BancoDados.lista_materias):
             if m.nome == nome_materia:
                 BancoDados.lista_materias.pop(i)
@@ -148,6 +160,7 @@ class BancoDados:
 
     @staticmethod
     def adicionar_nota_materia(nome_materia, valor, peso):
+        """Adiciona a nota a uma matéria e trigga o recálculo da média"""
         for m in BancoDados.lista_materias:
             if m.nome == nome_materia:
                 m.adicionar_nota(Nota(valor, peso))
@@ -157,6 +170,7 @@ class BancoDados:
 
     @staticmethod
     def adicionar_falta_materia(nome_materia, qtd):
+        """Adiciona a falta em uma matéria e soma no contador"""
         for m in BancoDados.lista_materias:
             if m.nome == nome_materia:
                 m.faltas += qtd
@@ -166,6 +180,7 @@ class BancoDados:
 
     @staticmethod
     def salvar_configuracoes_usuario(nome, curso, carga, semestres):
+        """Config globais do user"""
         u = BancoDados.info_usuario
         u.nome = nome
         u.curso = curso
@@ -177,10 +192,12 @@ class BancoDados:
 
     @staticmethod
     def get_materias_aprovadas():
+        """Retorna apenas as matérias onde o usuário atingiu a média"""
         return [m for m in BancoDados.lista_materias if m.media >= m.media_necessaria]
 
     @staticmethod
     def calcular_iech(materias: list):
+        """Calcula o Índice de Eficiência em Carga Horária"""
         soma_ponderada = 0.0
         soma_cargas = 0
 
@@ -197,6 +214,7 @@ class BancoDados:
     
     @staticmethod
     def calcular_iepl():
+        """ Calcula o Índice de Eficiência em Períodos Letivos"""
         usuario = BancoDados.get_usuario()
         total = usuario.semestres_totais
         
@@ -211,6 +229,7 @@ class BancoDados:
         
     @staticmethod
     def calcular_iea_geral():
+        """Calcula o IEA final"""
         materias_aprovadas = BancoDados.get_materias_aprovadas()
         
         iech = BancoDados.calcular_iech(materias_aprovadas)

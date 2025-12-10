@@ -8,6 +8,7 @@ from banco_dados import BancoDados
 
 
 class DialogAdicionarNota(QDialog):
+    """Diálogo para registrar nova nota incluindo seu valor e peso em uma matéria"""
     def __init__(self, nome_da_materia):
         super().__init__()
         try:
@@ -26,6 +27,7 @@ class DialogAdicionarNota(QDialog):
         self.btn_cancelar.clicked.connect(self.reject) 
 
     def get_dados(self):
+        """Retorna valor e peso da nota"""
         desc = self.lineEdit_descricao.text() if hasattr(self, 'lineEdit_descricao') else "Avaliação"
         if not desc: desc = "Avaliação"
         
@@ -36,10 +38,12 @@ class DialogAdicionarNota(QDialog):
         }
     
     def configurar_janela(self):
+        """Aplica config visuais nos frames"""
         self.setWindowFlags(Qt.WindowType.FramelessWindowHint)
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
 
 class DialogAdicionarFalta(QDialog):
+    """Diálogo para registrar faltas incluindo sua quantidade uma matéria"""
     def __init__(self, nome_da_materia):
         super().__init__()
         try:
@@ -61,6 +65,7 @@ class DialogAdicionarFalta(QDialog):
         self.btn_cancelar.clicked.connect(self.reject) 
 
     def get_dados(self):
+        """Retorna os dados como faltas e data"""
         data_str = QDate.currentDate().toString("yyyy-MM-dd")
         if hasattr(self, 'dateEdit_data_falta'):
             data_str = self.dateEdit_data_falta.date().toString("yyyy-MM-dd")
@@ -71,11 +76,13 @@ class DialogAdicionarFalta(QDialog):
         }
 
     def configurar_janela(self):
+        """Aplica config visuais nos frames"""
         self.setWindowFlags(Qt.WindowType.FramelessWindowHint)
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
 
 
 class DialogCalcularIEA(QDialog):
+    """Dialógo para exibir os resultados do cálculo de IEA, IECH e IEPL"""
     def __init__(self):
         super().__init__()
         try:
@@ -97,6 +104,7 @@ class DialogCalcularIEA(QDialog):
         self.realizar_calculo()
 
     def realizar_calculo(self):
+        """Chama a função feita la no banco_dados para receber e mostrar o resultado"""
         resultados = BancoDados.calcular_iea_geral()
         if hasattr(self, 'label_iech'): self.label_iech.setText(f"IECH = {resultados['IECH']:.2f}")
         if hasattr(self, 'label_iepl'): self.label_iepl.setText(f"IEPL = {resultados['IEPL']:.2f}")
@@ -110,9 +118,8 @@ class DialogCalcularIEA(QDialog):
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
 
 
-# Dialogs
-
 class DialogConfirmarExclusao(QDialog):
+    """Diálogo para confirmar a exclusão de um elemento"""
     def __init__(self, item_nome):
         super().__init__()
         self.setWindowTitle("Confirmar Exclusão")

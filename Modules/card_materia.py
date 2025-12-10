@@ -4,6 +4,7 @@ from .janelas_extras import DialogAdicionarNota, DialogAdicionarFalta, DialogCon
 from banco_dados import BancoDados 
 
 class CardMateria(QWidget):
+    """Widget responsável por exibir média, notas, faltas, barras de progresso etc."""
     def __init__(self, nome_materia, media, faltas, faltas_max, media_necessaria, parent_window):
         
         super().__init__()
@@ -45,6 +46,7 @@ class CardMateria(QWidget):
             self.btn_editar.clicked.connect(self.clicar_editar_materia)
 
     def clicar_add_nota(self):
+        """Abre uma caixa de diálogo pro usuário adicionar nota"""
         dialog = DialogAdicionarNota(self.nome_materia_atual)
         if dialog.exec():
             d = dialog.get_dados()
@@ -52,6 +54,7 @@ class CardMateria(QWidget):
                 self.parent_window.recarregar_dashboard() 
 
     def clicar_add_falta(self):
+        """Abre uma caixa de diálogo pro usuário adicionar falta"""
         dialog = DialogAdicionarFalta(self.nome_materia_atual)
         if dialog.exec():
             d = dialog.get_dados()
@@ -59,6 +62,7 @@ class CardMateria(QWidget):
                 self.parent_window.recarregar_dashboard()
                 
     def clicar_remover_materia(self):
+        """Abre uma caixa de diálogo pro usuário remover a matéria"""
         dialog = DialogConfirmarExclusao(self.nome_materia_atual)
         if dialog.exec():
             if BancoDados.deletar_materia(self.nome_materia_atual):
@@ -66,4 +70,5 @@ class CardMateria(QWidget):
                 self.parent_window.recarregar_dashboard()
 
     def clicar_editar_materia(self):
+        """Abre na janela principal a tela de edição de dados"""
         self.parent_window.abrir_tela_edicao(self.nome_materia_atual)
