@@ -70,7 +70,7 @@ class BancoDados:
         BancoDados.info_usuario = Usuario("Estudante", "Engenharia", 3600, 8)
         BancoDados._salvar_dados()
 
-    # --- GETTERS ---
+    # Getters
     @staticmethod
     def get_materias(filtro_semestre=None):
         if filtro_semestre is None: return BancoDados.lista_materias
@@ -90,7 +90,7 @@ class BancoDados:
     def get_usuario():
         return BancoDados.info_usuario
 
-    # --- AÇÕES (Auto-Save) ---
+    # Métodos
 
     @staticmethod
     def criar_proximo_semestre():
@@ -173,7 +173,7 @@ class BancoDados:
         u.semestres_totais = semestres
         BancoDados._salvar_dados()
 
-    # --- CÁLCULOS IEA ---
+    # Cálculo do IEA
 
     @staticmethod
     def get_materias_aprovadas():

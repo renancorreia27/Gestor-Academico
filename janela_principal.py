@@ -21,7 +21,7 @@ class JanelaPrincipal(QMainWindow):
         self.setup_ui() 
         self.carregar_dados_usuario()
         
-        # --- CARREGA TUDO AO INICIAR ---
+        # Load antes de começar o programa
         self.atualizar_combo_semestres()
         self.carregar_dashboard()
         self.carregar_semestres() 
@@ -49,7 +49,7 @@ class JanelaPrincipal(QMainWindow):
         if hasattr(self, 'btn_salvar_semestre'):
             self.btn_salvar_semestre.hide()
 
-        # Filtro Dashboard
+        # Dashboard
         if hasattr(self, 'comboBox_semestre'):
             self.comboBox_semestre.currentIndexChanged.connect(self.recarregar_dashboard)
 
@@ -58,9 +58,9 @@ class JanelaPrincipal(QMainWindow):
     def mudar_pagina(self, index):
         self.stack.setCurrentIndex(index)
 
-    # ==========================
-    #      LÓGICA DE USUÁRIO
-    # ==========================
+
+    # CONFIG DE USER
+
 
     def carregar_dados_usuario(self):
         u = BancoDados.get_usuario()
@@ -90,10 +90,10 @@ class JanelaPrincipal(QMainWindow):
     def exibir_iea(self):
         DialogCalcularIEA().exec()
 
-    # ==========================
-    #      LÓGICA DE SEMESTRES
-    # ==========================
     
+    #CONFIG DE SEMESTRES
+    
+
     def abrir_tela_semestres(self):
         self.mudar_pagina(1)
         self.carregar_semestres() 
@@ -132,15 +132,12 @@ class JanelaPrincipal(QMainWindow):
     def excluir_semestre_especifico(self, nome_semestre):
         """ Deleta semestre usando o Dialog estilizado. """
         
-        # --- MUDANÇA AQUI: Usa DialogConfirmarExclusao ---
         try:
             dialog = DialogConfirmarExclusao(nome_semestre)
             confirmou = dialog.exec()
         except:
-            # Fallback para QMessageBox se der erro no dialog customizado
             res = QMessageBox.question(self, "Excluir", f"Deseja excluir **{nome_semestre}**?", QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
             confirmou = (res == QMessageBox.StandardButton.Yes)
-        # -------------------------------------------------
 
         if confirmou:
             if BancoDados.deletar_semestre(nome_semestre):
@@ -156,9 +153,9 @@ class JanelaPrincipal(QMainWindow):
             self.comboBox_semestre.addItem(s.nome)
         self.comboBox_semestre.blockSignals(False)
 
-    # ==========================
-    #      LÓGICA DE MATÉRIAS
-    # ==========================
+  
+    #CONFIG DE MATÉRIAS
+
 
     def preparar_novo_cadastro(self):
         self.materia_em_edicao = None 

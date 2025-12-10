@@ -8,17 +8,15 @@ class CardSemestre(QWidget):
     def __init__(self, nome_semestre, situacao, parent_window):
         super().__init__()
         
-        # --- TRAVA DE SEGURANÇA VISUAL ---
-        # Define tamanho mínimo via código para garantir que o card ocupe espaço
+        # Define tamanho mínimo
         self.setMinimumHeight(140) 
         self.setMinimumWidth(250)
-        # ----------------------------------
 
         self.nome = nome_semestre
         self.parent_window = parent_window 
         self.situacao_atual = situacao
         
-        # Tenta carregar o desenho. Se falhar, monta um visual básico via código.
+        # Visual básico
         ui_carregado = False
         caminhos_tentativa = [
             "UI/Widget - card.semestre.ui",
@@ -37,7 +35,7 @@ class CardSemestre(QWidget):
             except:
                 continue
         
-        # Se NÃO achou o arquivo .ui, cria widgets na mão para não ficar invisível
+        # Se NÃO achou o arquivo .ui, cria widgets temp
         if not ui_carregado:
             print(f"[ERRO CRÍTICO] Não foi possível carregar o UI do Card para {nome_semestre}. Criando fallback.")
             self.setStyleSheet("background-color: #e0e0e0; border: 1px solid red; border-radius: 10px;")
@@ -56,19 +54,19 @@ class CardSemestre(QWidget):
             layout_fallback.addWidget(self.btn_finaliza_semestre)
             layout_fallback.addWidget(self.btn_delete_semestre)
 
-        # --- PREENCHIMENTO E CONEXÕES ---
+        #Conexões
         if hasattr(self, 'label_nome'): 
             self.label_nome.setText(nome_semestre)
         
         self.atualizar_interface(situacao)
 
-        # Conexões (com verificação se o botão existe)
+        # Complementar conexões
         if hasattr(self, 'btn_iniciar_semestre'): 
             self.btn_iniciar_semestre.clicked.connect(self.marcar_em_andamento)
         if hasattr(self, 'btn_finaliza_semestre'): 
             self.btn_finaliza_semestre.clicked.connect(self.marcar_finalizado)
         
-        # Busca botão de deletar (padrão ou fallback)
+        # Busca botão de deletar
         btn_del = getattr(self, 'btn_delete_semestre', None)
         if not btn_del:
             for btn in self.findChildren(QPushButton):

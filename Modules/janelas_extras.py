@@ -5,7 +5,7 @@ from PyQt6.QtCore import Qt, QDate
 from PyQt6 import uic
 from banco_dados import BancoDados 
 
-# --- DIALOGS COM ARQUIVO .UI (Mantidos) ---
+
 
 class DialogAdicionarNota(QDialog):
     def __init__(self, nome_da_materia):
@@ -110,7 +110,7 @@ class DialogCalcularIEA(QDialog):
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
 
 
-# --- DIALOGS VIA CÓDIGO---
+# Dialogs
 
 class DialogConfirmarExclusao(QDialog):
     def __init__(self, item_nome):

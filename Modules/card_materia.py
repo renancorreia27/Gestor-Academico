@@ -15,12 +15,12 @@ class CardMateria(QWidget):
         self.nome_materia_atual = nome_materia
         self.parent_window = parent_window
         
-        # --- Visual ---
+        # Visual
         self.label_card_materia.setText(nome_materia)
         self.label_media.setText(f"{media:.1f}") 
         self.label_faltas.setText(f"{faltas}/{faltas_max}")
 
-        # Barras
+        # Barras de progressão
         self.progressBar_media.setValue(int(media * 10))
         if media >= media_necessaria:
             self.progressBar_media.setStyleSheet("QProgressBar::chunk { background-color: #2ecc71; }")
@@ -34,7 +34,7 @@ class CardMateria(QWidget):
         if faltas > faltas_max:
             self.progressBar_falta.setValue(faltas_max)
 
-        # --- Conexões ---
+        #Conexões de botão
         self.btn_add_nota.clicked.connect(self.clicar_add_nota)
         self.btn_add_falta.clicked.connect(self.clicar_add_falta)
         
@@ -66,5 +66,4 @@ class CardMateria(QWidget):
                 self.parent_window.recarregar_dashboard()
 
     def clicar_editar_materia(self):
-        # Chama a função na janela principal para trocar de tela e preencher dados
         self.parent_window.abrir_tela_edicao(self.nome_materia_atual)
