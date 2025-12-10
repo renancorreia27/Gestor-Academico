@@ -5,6 +5,15 @@ from PyQt6.QtCore import Qt, QDate
 from PyQt6 import uic
 from banco_dados import BancoDados 
 
+import sys
+import os
+"""Função que permite que as pastas sejam acessiveis pelo executável"""
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
 
 
 class DialogAdicionarNota(QDialog):
@@ -12,7 +21,7 @@ class DialogAdicionarNota(QDialog):
     def __init__(self, nome_da_materia):
         super().__init__()
         try:
-            uic.loadUi("UI/Dialog - add.nota.ui", self)
+            uic.loadUi(resource_path("UI/Dialog - add.nota.ui"), self)
         except:
             try:
                 uic.loadUi("Dialog - add.nota.ui", self)
@@ -47,7 +56,7 @@ class DialogAdicionarFalta(QDialog):
     def __init__(self, nome_da_materia):
         super().__init__()
         try:
-            uic.loadUi("UI/Dialog - add.falta.ui", self)
+            uic.loadUi(resource_path("UI/Dialog - add.falta.ui"), self)
         except:
              try:
                 uic.loadUi("Dialog - add.falta.ui", self)
@@ -86,7 +95,7 @@ class DialogCalcularIEA(QDialog):
     def __init__(self):
         super().__init__()
         try:
-            uic.loadUi("UI/Dialog - calcular.iea.ui", self)
+            uic.loadUi(resource_path("UI/Dialog - calcular.iea.ui"), self)
         except:
              try:
                 uic.loadUi("Dialog - calcular.iea.ui", self)

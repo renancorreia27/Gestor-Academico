@@ -2,7 +2,17 @@ from PyQt6.QtWidgets import QWidget, QPushButton, QLabel, QVBoxLayout
 from PyQt6 import uic
 from PyQt6.QtCore import Qt
 from banco_dados import BancoDados 
+
+import sys
 import os
+"""Função que permite que as pastas sejam acessiveis pelo executável"""
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
+
 
 class CardSemestre(QWidget):
     """Widget reponsável por exibir status, Gerenciar Semestres e permitir a alteração do status"""
@@ -18,43 +28,11 @@ class CardSemestre(QWidget):
         self.situacao_atual = situacao
         
         # Carrega UI
-        ui_carregado = False
-        caminhos_tentativa = [
-            "UI/Widget - card.semestre.ui",
-            "Widget - card.semestre.ui",
-            "v2/UI/Widget - card.semestre.ui",
-            "../UI/Widget - card.semestre.ui"
-        ]
-
-        for caminho in caminhos_tentativa:
-            try:
-                if os.path.exists(caminho):
-                    uic.loadUi(caminho, self)
-                    ui_carregado = True
-                    print(f"[DEBUG] Card UI carregado de: {caminho}")
-                    break
-            except:
-                continue
+        try:
+            uic.loadUi(resource_path("UI/Widget - card.semestre.ui"), self)
+        except:
+            uic.loadUi("Widget - card.semestre.ui", self)
         
-        # Se NÃO achou o arquivo .ui, cria widgets temp
-        if not ui_carregado:
-            print(f"[ERRO CRÍTICO] Não foi possível carregar o UI do Card para {nome_semestre}. Criando fallback.")
-            self.setStyleSheet("background-color: #e0e0e0; border: 1px solid red; border-radius: 10px;")
-            layout_fallback = QVBoxLayout(self)
-            self.label_nome = QLabel(nome_semestre)
-            self.label_situacao = QLabel(situacao)
-            self.label_nome.setStyleSheet("font-size: 16px; font-weight: bold; color: black;")
-            layout_fallback.addWidget(self.label_nome)
-            layout_fallback.addWidget(self.label_situacao)
-            
-            # Botões de emergência
-            self.btn_iniciar_semestre = QPushButton("Iniciar")
-            self.btn_finaliza_semestre = QPushButton("Finalizar")
-            self.btn_delete_semestre = QPushButton("Excluir")
-            layout_fallback.addWidget(self.btn_iniciar_semestre)
-            layout_fallback.addWidget(self.btn_finaliza_semestre)
-            layout_fallback.addWidget(self.btn_delete_semestre)
-
         #Conexões
         if hasattr(self, 'label_nome'): 
             self.label_nome.setText(nome_semestre)

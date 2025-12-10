@@ -160,7 +160,7 @@ QPushButton#btn_cancelar:pressed {
     <property name="font">
      <font>
       <family>Segoe UI,sans-serif</family>
-      <pointsize>-1</pointsize>
+      <pointsize>1</pointsize>
       <weight>99</weight>
       <bold>true</bold>
      </font>
@@ -207,7 +207,7 @@ QPushButton#btn_cancelar:pressed {
      </property>
      <property name="font">
       <font>
-       <pointsize>-1</pointsize>
+       <pointsize>1</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
@@ -233,7 +233,7 @@ QPushButton#btn_cancelar:pressed {
      </property>
      <property name="font">
       <font>
-       <pointsize>-1</pointsize>
+       <pointsize>1</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
@@ -289,7 +289,7 @@ QPushButton#btn_cancelar:pressed {
      </property>
      <property name="font">
       <font>
-       <pointsize>-1</pointsize>
+       <pointsize>1</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
@@ -321,7 +321,7 @@ QPushButton#btn_cancelar:pressed {
      </property>
      <property name="font">
       <font>
-       <pointsize>-1</pointsize>
+       <pointsize>1</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
@@ -359,7 +359,7 @@ QPushButton#btn_cancelar:pressed {
     </property>
     <property name="font">
      <font>
-      <pointsize>-1</pointsize>
+      <pointsize>1</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -391,7 +391,7 @@ QPushButton#btn_cancelar:pressed {
     </property>
     <property name="font">
      <font>
-      <pointsize>-1</pointsize>
+      <pointsize>1</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>

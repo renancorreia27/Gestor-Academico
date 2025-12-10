@@ -7,12 +7,22 @@ from Modules.card_semestre import CardSemestre
 from Modules.janelas_extras import DialogCalcularIEA, DialogConfirmarExclusao 
 from banco_dados import BancoDados
 
+import sys
+import os
+"""Função que permite que as pastas sejam acessiveis pelo executável"""
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
+
 class JanelaPrincipal(QMainWindow):
     "Controlador principal do programa, tem a função de controlar todas as janelas"
     def __init__(self):
         super().__init__()
         try:
-            uic.loadUi("UI/MainWindow - eng.software.ui", self)
+            uic.loadUi(resource_path("UI/MainWindow - eng.software.ui"), self)
         except:
             uic.loadUi("MainWindow - eng.software.ui", self)
             

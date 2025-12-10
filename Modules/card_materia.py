@@ -3,13 +3,23 @@ from PyQt6 import uic
 from .janelas_extras import DialogAdicionarNota, DialogAdicionarFalta, DialogConfirmarExclusao
 from banco_dados import BancoDados 
 
+import sys
+import os
+"""Função que permite que as pastas sejam acessiveis pelo executável"""
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
+
 class CardMateria(QWidget):
     """Widget responsável por exibir média, notas, faltas, barras de progresso etc."""
     def __init__(self, nome_materia, media, faltas, faltas_max, media_necessaria, parent_window):
         
         super().__init__()
         try:
-            uic.loadUi("UI/Widget - card.materia.ui", self)
+            uic.loadUi(resource_path("UI/Widget - card.materia.ui"), self)
         except:
             uic.loadUi("Widget - card.materia.ui", self)
 

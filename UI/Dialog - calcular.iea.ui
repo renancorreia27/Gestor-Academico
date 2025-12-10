@@ -124,7 +124,7 @@ QPushButton#btn_fechar:pressed {
     <property name="font">
      <font>
       <family>Segoe UI,sans-serif</family>
-      <pointsize>-1</pointsize>
+      <pointsize>1</pointsize>
       <weight>99</weight>
       <bold>true</bold>
      </font>
@@ -156,7 +156,7 @@ QPushButton#btn_fechar:pressed {
       <widget class="QLabel" name="label_media_iea">
        <property name="font">
         <font>
-         <pointsize>-1</pointsize>
+         <pointsize>1</pointsize>
          <weight>75</weight>
          <bold>true</bold>
         </font>
@@ -173,7 +173,7 @@ QPushButton#btn_fechar:pressed {
       <widget class="QLabel" name="label_iech">
        <property name="font">
         <font>
-         <pointsize>-1</pointsize>
+         <pointsize>1</pointsize>
          <weight>75</weight>
          <bold>true</bold>
         </font>
@@ -190,7 +190,7 @@ QPushButton#btn_fechar:pressed {
       <widget class="QLabel" name="label_iepl">
        <property name="font">
         <font>
-         <pointsize>-1</pointsize>
+         <pointsize>1</pointsize>
          <weight>75</weight>
          <bold>true</bold>
         </font>
@@ -207,7 +207,7 @@ QPushButton#btn_fechar:pressed {
       <widget class="QLabel" name="label_iea">
        <property name="font">
         <font>
-         <pointsize>-1</pointsize>
+         <pointsize>1</pointsize>
          <weight>99</weight>
          <bold>true</bold>
         </font>
