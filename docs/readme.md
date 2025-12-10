@@ -1,15 +1,21 @@
-Documentação do Projeto: Gestor Acadêmico
+# 📚 Documentação do Projeto: Gestor Acadêmico
 
-Este repositório centraliza toda a documentação de análise e design do sistema Gestor Acadêmico.
-Seu objetivo é servir como uma fonte de consulta clara, organizada e atualizada para todos os envolvidos no desenvolvimento e manutenção do projeto.
+---
 
-Estrutura de Arquivos
+### 📄 `Gestor Acadêmico.pdf`
+**Descrição:** Documento principal e consolidado do projeto.  
+Nele estão reunidos todos os materiais elaborados, incluindo:
 
-A pasta está organizada conforme os principais artefatos da Engenharia de Software.
+- Levantamento de requisitos  
+- Casos de uso  
+- Diagramas (classes, sequência, navegação, modelo conceitual)  
+- Estrutura e modelagem do sistema  
+- Descrições textuais dos fluxos  
+- Relato da cliente  
+- Considerações finais  
 
-Gestor Acadêmico.pdf
+**🔹 Sempre consulte este arquivo primeiro ao buscar qualquer informação sobre o sistema.**
 
-Descrição: Documento principal e consolidado do projeto.
-Contém todas as informações necessárias para consulta.
-🔹 Sempre consulte este arquivo primeiro.
+---
+
 
