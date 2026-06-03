@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36" version="29.2.2">
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36">
   <diagram name="Página-1" id="r-0QPf6V2tmln9Oeitv-">
-    <mxGraphModel dx="983" dy="517" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" background="light-dark(#FFFFFF,#E2E2E2)" math="0" shadow="0">
+    <mxGraphModel dx="1414" dy="783" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" background="light-dark(#FFFFFF,#E2E2E2)" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -98,7 +98,7 @@
         <mxCell id="s75n65TD68BcSeIcQcIj-13" parent="s75n65TD68BcSeIcQcIj-59" style="rounded=1;whiteSpace=wrap;arcSize=50;strokeWidth=2;" value="Lançar Falta" vertex="1">
           <mxGeometry height="39" width="114" x="578.75" y="450.5" as="geometry" />
         </mxCell>
-        <mxCell id="s75n65TD68BcSeIcQcIj-14" parent="s75n65TD68BcSeIcQcIj-59" style="rounded=1;whiteSpace=wrap;arcSize=50;strokeWidth=2;" value="Calcular IEA" vertex="1">
+        <mxCell id="s75n65TD68BcSeIcQcIj-14" parent="s75n65TD68BcSeIcQcIj-59" style="rounded=1;whiteSpace=wrap;arcSize=50;strokeWidth=2;" value="Calcular IRA" vertex="1">
           <mxGeometry height="39" width="111" x="240.75" y="390.5" as="geometry" />
         </mxCell>
         <mxCell id="s75n65TD68BcSeIcQcIj-43" edge="1" parent="s75n65TD68BcSeIcQcIj-59" source="s75n65TD68BcSeIcQcIj-30" style="shape=connector;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.3333333333333333;exitDx=0;exitDy=0;exitPerimeter=0;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;endArrow=none;entryX=0;entryY=0.75;entryDx=0;entryDy=0;endFill=0;" target="s75n65TD68BcSeIcQcIj-3">
