@@ -12,8 +12,12 @@
 <body>
     <div class="container d-flex align-items-center justify-content-center min-vh-100">
         <div class="card p-4 shadow" style="width: 100%; max-width: 400px;">
-            <h3 class="card-title text-center mb-4">Login</h3>
+            <h3 class="card-title text-center mb-4">Cadastro</h3>
             <form>
+                <div class="mb-3">
+                    <label for="name" class="form-label">Nome</label>
+                    <input type="text" class="form-control" id="name" placeholder="Digite seu nome">
+                </div>
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
                     <input type="email" class="form-control" id="email" placeholder="Digite seu email">
@@ -22,11 +26,8 @@
                     <label for="password" class="form-label">Senha</label>
                     <input type="password" class="form-control" id="password" placeholder="Digite sua senha">
                 </div>
-                <button type="submit" class="btn btn-success w-100">Entrar</button>
+                <button type="submit" class="btn btn-success w-100">Cadastrar</button>
             </form>
-            <p class="text-center mt-3">
-                Não tem uma conta? <a href="register.html">Cadastre-se aqui</a>
-            </p>
         </div>
     </div>
 </body>
