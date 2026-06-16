@@ -22,13 +22,16 @@
                 </h4>
                 <hr class="text-secondary">
                 <a href="#" class="active"><i class="bi bi-house-door-fill me-2"></i> Início</a>
-                <a href="#"><i class="bi bi-journal-bookmark-fill me-2"></i> Semestres</a>
-                <a href="#"><i class="bi bi-book-fill me-2"></i> Disciplinas</a>
-                <a href="#"><i class="bi bi-calculator-fill me-2"></i> Calcular IEA</a>
+                
+                <a href="#" style="pointer-events: none; opacity: 0.5;"><i class="bi bi-journal-bookmark-fill me-2"></i> Semestres</a>
+                <a href="#" style="pointer-events: none; opacity: 0.5;"><i class="bi bi-book-fill me-2"></i> Disciplinas</a>
+                <a href="#" style="pointer-events: none; opacity: 0.5;"><i class="bi bi-calculator-fill me-2"></i> Calcular IRA</a>
                 
                 <div class="mt-auto">
                     <hr class="text-secondary">
-                    <a href="#"><i class="bi bi-gear-fill me-2"></i> Configurações</a>
+                    <a href="{{ url_for('logout') }}" class="text-danger fw-bold text-decoration-none">
+                        <i class="bi bi-box-arrow-right me-2"></i> Sair
+                    </a>
                 </div>
             </nav>
 
@@ -37,7 +40,7 @@
                 <header class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-4 pt-4 border-bottom">
                     <h1 class="h2">Dashboard</h1>
                     <div class="d-flex align-items-center">
-                        <span class="me-3 text-muted">Olá, <strong>Messi</strong></span>
+                        <span class="me-3 text-muted">Olá, <strong>{{ session.user_name.split(' ')[0] if session.get('user_name') else 'Usuário' }}</strong></span>
                         <i class="bi bi-person-circle fs-3 text-secondary"></i>
                     </div>
                 </header>
@@ -48,7 +51,7 @@
                         <div class="col-md-4 mb-3">
                             <div class="card card-custom border-left-primary h-100">
                                 <div class="card-body">
-                                    <h6 class="text-muted text-uppercase mb-2">IEA Geral</h6>
+                                    <h6 class="text-muted text-uppercase mb-2">IRA Geral</h6>
                                     <h3 class="mb-0 fw-bold text-dark">8.75</h3>
                                 </div>
                             </div>
@@ -101,7 +104,7 @@
                             <div class="card card-custom h-100">
                                 <div class="card-body d-flex flex-column">
                                     <div class="d-flex justify-content-between align-items-start mb-2">
-                                        <h5 class="card-title fw-bold">Sistemas Operativos</h5>
+                                        <h5 class="card-title fw-bold">Sistemas Operacionais</h5>
                                         <span class="badge bg-primary rounded-pill">Ativa</span>
                                     </div>
                                     <p class="card-text text-muted small mb-3">Prof. Responsável</p>
