@@ -1,0 +1,20 @@
+# Ambientes virtuais
+venv/
+env/
+.venv/
+
+# Variáveis de ambiente
+.env
+
+# Pycache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# IDEs
+.vscode/
+.idea/
+
+# Outros
+*.log
+dados_sistema.json
