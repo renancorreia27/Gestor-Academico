@@ -10,39 +10,61 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
 </head>
 <body>
-    <div class="container d-flex align-items-center justify-content-center min-vh-100">
-        <div class="card p-4 shadow" style="width: 100%; max-width: 400px;">
-            <h3 class="card-title text-center mb-4">Cadastro</h3>
+    <div class="container d-flex align-items-center justify-content-center min-vh-100 py-4">
+        <div class="card login-card" style="width: 100%; max-width: 450px;">
+            <div class="login-header">
+                <i class="bi bi-mortarboard-fill mb-2 d-block"></i>
+                <h3 class="fw-bold mb-0">Criar Conta</h3>
+                <p class="text-light opacity-75 small mt-1 mb-0">Junte-se ao Gestor Acadêmico</p>
+            </div>
             
-            {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    {% for category, message in messages %}
-                        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-                            {{ message }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}
+            <div class="login-body">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
 
-            <form action="/register" method="POST">
-                <div class="mb-3">
-                    <label for="name" class="form-label">Nome</label>
-                    <input type="text" class="form-control" id="name" name="name" placeholder="Digite seu nome" required>
+                <form action="/register" method="POST">
+                    <div class="mb-4">
+                        <label for="name" class="form-label text-muted fw-bold small">NOME COMPLETO</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light"><i class="bi bi-person text-muted"></i></span>
+                            <input type="text" class="form-control bg-light border-start-0" id="name" name="name" placeholder="Digite seu nome" required>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="email" class="form-label text-muted fw-bold small">E-MAIL</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light"><i class="bi bi-envelope text-muted"></i></span>
+                            <input type="email" class="form-control bg-light border-start-0" id="email" name="email" placeholder="Digite seu e-mail" required>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="password" class="form-label text-muted fw-bold small">SENHA</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light"><i class="bi bi-lock text-muted"></i></span>
+                            <input type="password" class="form-control bg-light border-start-0" id="password" name="password" placeholder="Crie uma senha" required>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary w-100 mt-2 mb-4">CADASTRAR</button>
+                </form>
+                
+                <div class="text-center mt-2 border-top pt-4">
+                    <span class="text-muted small">Já possui uma conta?</span>
+                    <a href="/" class="text-muted fw-bold small d-inline-block ms-1 hover-primary">
+                        <i class="bi bi-box-arrow-in-right me-1"></i> Fazer login
+                    </a>
                 </div>
-                <div class="mb-3">
-                    <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="email" name="email" placeholder="Digite seu email" required>
-                </div>
-                <div class="mb-3">
-                    <label for="password" class="form-label">Senha</label>
-                    <input type="password" class="form-control" id="password" name="password" placeholder="Digite sua senha" required>
-                </div>
-                <button type="submit" class="btn btn-success w-100">Cadastrar</button>
-            </form>
-            <p class="text-center mt-3">
-                Já possui conta? <a href="/">Faça login</a>
-            </p>
+            </div>
         </div>
     </div>
     
