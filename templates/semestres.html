@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<header class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-4 pt-4 border-bottom">
+    <h1 class="h2">Gerenciar Semestres</h1>
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalNovoSemestre">
+        <i class="bi bi-plus-lg me-1"></i> Novo Semestre
+    </button>
+</header>
+
+<main class="flex-grow-1">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <div class="row">
+        {% if semestres %}
+            {% for s in semestres %}
+            <div class="col-md-4 mb-4">
+                <div class="card card-custom h-100">
+                    <div class="card-body d-flex flex-column">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <h5 class="card-title fw-bold mb-0">{{ s.nome }}</h5>
+                            {% if s.situacao == "Finalizado" %}
+                                <span class="badge bg-success rounded-pill">{{ s.situacao }}</span>
+                            {% elif s.situacao == "Em Andamento" %}
+                                <span class="badge bg-primary rounded-pill">{{ s.situacao }}</span>
+                            {% else %}
+                                <span class="badge bg-secondary rounded-pill">{{ s.situacao }}</span>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mt-auto d-flex gap-2">
+                            <form method="POST" action="{{ url_for('status_semestre', id=s.id) }}" class="flex-grow-1">
+                                <select name="situacao" class="form-select form-select-sm" onchange="this.form.submit()">
+                                    <option value="Não Iniciado" {% if s.situacao == 'Não Iniciado' %}selected{% endif %}>Não Iniciado</option>
+                                    <option value="Em Andamento" {% if s.situacao == 'Em Andamento' %}selected{% endif %}>Em Andamento</option>
+                                    <option value="Finalizado" {% if s.situacao == 'Finalizado' %}selected{% endif %}>Finalizado</option>
+                                </select>
+                            </form>
+                            
+                            <form method="POST" action="{{ url_for('deletar_semestre', id=s.id) }}" onsubmit="return confirm('Tem certeza que deseja excluir este semestre? TODAS as matérias e notas associadas serão excluídas!');">
+                                <button type="submit" class="btn btn-outline-danger btn-sm" title="Excluir Semestre">
+                                    <i class="bi bi-trash3-fill"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-12 text-center py-5">
+                <p class="text-muted">Nenhum semestre cadastrado ainda.</p>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Modal Novo Semestre -->
+    <div class="modal fade" id="modalNovoSemestre" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <form method="POST" action="{{ url_for('novo_semestre') }}" class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Novo Semestre</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Nome do Semestre</label>
+                        <input type="text" class="form-control" name="nome" placeholder="Ex: 1º Semestre 2026" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+{% endblock %}
