@@ -33,13 +33,48 @@
         {% endfor %}
       {% endif %}
     {% endwith %}
+
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card bg-primary text-white shadow-sm border-0" style="border-radius: 1rem;">
+                <div class="card-body p-4 d-flex justify-content-between align-items-center flex-wrap gap-3">
+                    <div>
+                        <h4 class="mb-1 fw-bold">{{ usuario.curso }}</h4>
+                        <p class="mb-0" style="color: rgba(255,255,255,0.8);"><i class="bi bi-building me-1"></i> {{ usuario.instituicao }}</p>
+                    </div>
+                    {% set semestres_completos = 0 %}
+                    {% for s in semestres %}
+                        {% if s.situacao == 'Finalizado' %}
+                            {% set semestres_completos = semestres_completos + 1 %}
+                        {% endif %}
+                    {% endfor %}
+                    {% set progresso = ((semestres|length) / usuario.semestres_totais * 100) if usuario.semestres_totais else 0 %}
+                    <div class="text-end" style="min-width: 250px;">
+                        <p class="mb-1 small" style="color: rgba(255,255,255,0.8);">Progresso do Curso ({{ semestres|length }} de {{ usuario.semestres_totais }} semestres)</p>
+                        <div class="progress" style="height: 8px; background-color: rgba(255,255,255,0.2);">
+                            <div class="progress-bar bg-white" role="progressbar" style="width: {{ progresso }}%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     
     <div class="row mb-4">
         <div class="col-md-4 mb-3">
             <div class="card card-custom border-left-primary h-100">
                 <div class="card-body">
                     <h6 class="text-muted text-uppercase mb-2">IRA Geral</h6>
-                    <h3 class="mb-0 fw-bold text-dark">{{ "%.2f"|format(ira_geral) }}</h3>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h3 class="mb-0 fw-bold text-dark">{{ "%.2f"|format(ira_geral) }}</h3>
+                        {% if usuario.meta_ira > 0 %}
+                            {% if ira_geral >= usuario.meta_ira %}
+                                <span class="badge bg-success rounded-pill px-3 py-2"><i class="bi bi-trophy-fill me-1"></i> Meta ({{ "%.1f"|format(usuario.meta_ira) }})</span>
+                            {% else %}
+                                <span class="badge bg-light text-secondary border rounded-pill px-3 py-2"><i class="bi bi-bullseye me-1"></i> Meta: {{ "%.1f"|format(usuario.meta_ira) }}</span>
+                            {% endif %}
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>

@@ -1,0 +1,216 @@
+{% set hide_sidebar = is_onboarding %}
+{% extends 'base.html' %}
+
+{% block head %}
+<style>
+    /* Estilos para o Onboarding Wizard */
+    .wizard-step {
+        display: none;
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.3s ease-in-out;
+    }
+    .wizard-step.active {
+        display: block;
+        opacity: 1;
+        transform: translateY(0);
+    }
+    .wizard-step.fade-out {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    
+    .onboarding-bg {
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        min-height: 100vh;
+    }
+    
+    .glass-card {
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(10px);
+        border-radius: 1.5rem;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+    }
+    
+    .progress-indicator {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 2rem;
+    }
+    .progress-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background-color: #e9ecef;
+        transition: background-color 0.3s ease;
+    }
+    .progress-dot.active {
+        background-color: #0d6efd;
+    }
+    
+    /* Inputs estilizados */
+    .floating-input {
+        border-radius: 1rem;
+        border: 1px solid #dee2e6;
+        padding: 1rem;
+        box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+        transition: all 0.3s ease;
+    }
+    .floating-input:focus {
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
+        border-color: #86b7fe;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-column {% if is_onboarding %}justify-content-center align-items-center onboarding-bg{% else %}pt-4{% endif %}">
+    
+    {% if not is_onboarding %}
+    <header class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-4 border-bottom w-100">
+        <h1 class="h2">Meu Perfil</h1>
+    </header>
+    {% endif %}
+
+    <div class="card {% if is_onboarding %}glass-card p-5 w-100" style="max-width: 650px;"{% else %}shadow-sm border-0 w-100"{% endif %}>
+        <div class="card-body">
+            
+            {% if is_onboarding %}
+            <div class="progress-indicator" id="progressIndicator">
+                <div class="progress-dot active"></div>
+                <div class="progress-dot"></div>
+                <div class="progress-dot"></div>
+            </div>
+            {% endif %}
+
+            <form method="POST" action="{{ url_for('perfil') }}" id="perfilForm">
+                
+                <!-- Passo 1: Boas Vindas & Curso -->
+                <div class="wizard-step {% if not is_onboarding %}active{% else %}active{% endif %}" id="step1">
+                    {% if is_onboarding %}
+                    <div class="text-center mb-5">
+                        <div class="display-4 text-primary mb-3"><i class="bi bi-mortarboard-fill"></i></div>
+                        <h2 class="fw-bold text-dark">Bem-vindo(a), {{ usuario.nome.split(' ')[0] if usuario.nome else 'Aluno' }}!</h2>
+                        <p class="text-muted">Vamos preparar o seu ambiente. Onde você estuda?</p>
+                    </div>
+                    {% endif %}
+
+                    <div class="row g-4">
+                        <div class="col-md-12">
+                            <label class="form-label fw-bold text-secondary">Instituição de Ensino</label>
+                            <input type="text" class="form-control form-control-lg floating-input" name="instituicao" id="instituicao" value="{{ usuario.instituicao }}" placeholder="Ex: USP, Unicamp, PUC..." required>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label fw-bold text-secondary">Nome do Curso</label>
+                            <input type="text" class="form-control form-control-lg floating-input" name="curso" id="curso" value="{{ usuario.curso }}" placeholder="Ex: Engenharia de Software" required>
+                        </div>
+                    </div>
+
+                    {% if is_onboarding %}
+                    <div class="mt-5 text-end">
+                        <button type="button" class="btn btn-primary btn-lg rounded-pill px-5 shadow-sm" onclick="nextStep(1, 2)">Próximo <i class="bi bi-arrow-right"></i></button>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Passo 2: Duração e Carga -->
+                <div class="wizard-step {% if not is_onboarding %}active mt-4{% endif %}" id="step2">
+                    {% if is_onboarding %}
+                    <div class="text-center mb-5">
+                        <div class="display-4 text-primary mb-3"><i class="bi bi-clock-history"></i></div>
+                        <h3 class="fw-bold text-dark">Duração do Curso</h3>
+                        <p class="text-muted">Isso nos ajudará a montar a sua barra de progresso.</p>
+                    </div>
+                    {% endif %}
+
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold text-secondary">Duração (Semestres)</label>
+                            <input type="number" class="form-control form-control-lg floating-input" name="semestres_totais" id="semestres" value="{{ usuario.semestres_totais or 8 }}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold text-secondary">Carga Horária (h)</label>
+                            <input type="number" class="form-control form-control-lg floating-input" name="carga_horaria_total" id="carga" value="{{ usuario.carga_horaria_total or 3200 }}" required>
+                        </div>
+                    </div>
+
+                    {% if is_onboarding %}
+                    <div class="mt-5 d-flex justify-content-between">
+                        <button type="button" class="btn btn-light btn-lg rounded-pill px-4 text-muted border" onclick="nextStep(2, 1)"><i class="bi bi-arrow-left"></i> Voltar</button>
+                        <button type="button" class="btn btn-primary btn-lg rounded-pill px-5 shadow-sm" onclick="nextStep(2, 3)">Próximo <i class="bi bi-arrow-right"></i></button>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Passo 3: Meta -->
+                <div class="wizard-step {% if not is_onboarding %}active mt-4{% endif %}" id="step3">
+                    {% if is_onboarding %}
+                    <div class="text-center mb-5">
+                        <div class="display-4 text-warning mb-3"><i class="bi bi-trophy-fill"></i></div>
+                        <h3 class="fw-bold text-dark">Sua Grande Meta</h3>
+                        <p class="text-muted">Defina o Índice de Rendimento Acadêmico (IRA) que você quer alcançar.</p>
+                    </div>
+                    {% endif %}
+
+                    <div class="row g-4 justify-content-center">
+                        <div class="col-md-8 text-center">
+                            <label class="form-label fw-bold text-secondary">Meta de IRA</label>
+                            <input type="number" step="0.1" class="form-control form-control-lg floating-input text-center fs-3 fw-bold text-primary" name="meta_ira" id="meta" value="{{ usuario.meta_ira or 7.5 }}" required>
+                        </div>
+                    </div>
+
+                    <div class="mt-5 {% if is_onboarding %}d-flex justify-content-between{% else %}text-end mt-4{% endif %}">
+                        {% if is_onboarding %}
+                        <button type="button" class="btn btn-light btn-lg rounded-pill px-4 text-muted border" onclick="nextStep(3, 2)"><i class="bi bi-arrow-left"></i> Voltar</button>
+                        <button type="submit" class="btn btn-success btn-lg rounded-pill px-5 shadow-sm">Concluir <i class="bi bi-check-circle ms-1"></i></button>
+                        {% else %}
+                        <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                        {% endif %}
+                    </div>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+{% if is_onboarding %}
+<script>
+function nextStep(current, next) {
+    const currentStep = document.getElementById('step' + current);
+    const nextStep = document.getElementById('step' + next);
+    
+    // Validate inputs in current step before moving forward
+    if (next > current) {
+        const inputs = currentStep.querySelectorAll('input[required]');
+        for (let input of inputs) {
+            if (!input.value) {
+                input.reportValidity();
+                return;
+            }
+        }
+    }
+
+    currentStep.classList.add('fade-out');
+    
+    setTimeout(() => {
+        currentStep.classList.remove('active', 'fade-out');
+        nextStep.classList.add('active');
+        
+        // Update dots
+        const dots = document.querySelectorAll('.progress-dot');
+        dots.forEach((dot, index) => {
+            if (index < next) {
+                dot.classList.add('active');
+            } else {
+                dot.classList.remove('active');
+            }
+        });
+    }, 300); // Wait for fade out animation
+}
+</script>
+{% endif %}
+{% endblock %}

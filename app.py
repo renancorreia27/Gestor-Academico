@@ -58,6 +58,11 @@ def dashboard():
         return redirect(url_for('login'))
         
     user_id = session['user_id']
+    
+    usuario = BancoDados.obter_usuario(user_id)
+    if not usuario or not usuario.curso:
+        return redirect(url_for('perfil', onboarding=True))
+        
     semestres = BancoDados.listar_semestres(user_id)
     
     semestre_atual = None
@@ -77,7 +82,7 @@ def dashboard():
 
     ira_geral = BancoDados.calcular_ira_geral(user_id)
 
-    return render_template('index.html', semestres=semestres, materias=materias, semestre_atual=semestre_atual, ira_geral=ira_geral)
+    return render_template('index.html', semestres=semestres, materias=materias, semestre_atual=semestre_atual, ira_geral=ira_geral, usuario=usuario)
 
 @app.route('/semestre/novo', methods=['POST'])
 def novo_semestre():
@@ -161,6 +166,26 @@ def status_semestre(id):
         BancoDados.atualizar_status_semestre(id, situacao)
         flash("Status do semestre atualizado!", "success")
     return redirect(url_for('semestres'))
+
+@app.route('/perfil', methods=['GET', 'POST'])
+def perfil():
+    if 'user_id' not in session: return redirect(url_for('login'))
+    user_id = session['user_id']
+    
+    if request.method == 'POST':
+        instituicao = request.form.get('instituicao', '')
+        curso = request.form.get('curso', '')
+        semestres_totais = request.form.get('semestres_totais', type=int, default=0)
+        carga_horaria_total = request.form.get('carga_horaria_total', type=int, default=0)
+        meta_ira = request.form.get('meta_ira', type=float, default=0.0)
+        
+        BancoDados.atualizar_perfil(user_id, instituicao, curso, semestres_totais, carga_horaria_total, meta_ira)
+        flash("Perfil atualizado com sucesso!", "success")
+        return redirect(url_for('dashboard'))
+        
+    usuario = BancoDados.obter_usuario(user_id)
+    is_onboarding = request.args.get('onboarding', type=bool, default=False)
+    return render_template('perfil.html', usuario=usuario, is_onboarding=is_onboarding)
 
 @app.route('/logout')
 def logout():

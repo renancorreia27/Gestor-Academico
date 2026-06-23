@@ -10,6 +10,15 @@ class BancoDados:
         if not cursor: return
         
         try:
+            try:
+                cursor.execute("ALTER TABLE usuarios ADD COLUMN instituicao VARCHAR(255) DEFAULT ''")
+            except Exception:
+                pass
+            try:
+                cursor.execute("ALTER TABLE usuarios ADD COLUMN meta_ira DECIMAL(5,2) DEFAULT 0.0")
+            except Exception:
+                pass
+            
             # Tabela de Semestres
             cursor.execute("""
                 CREATE TABLE IF NOT EXISTS semestres (
@@ -81,7 +90,9 @@ class BancoDados:
                 semestres_totais=r.get('semestres_totais', 0),
                 ira=r.get('ira', 0.0),
                 semestres_cursados=r.get('semestres_cursados', 0),
-                id=r.get('id')
+                id=r.get('id'),
+                instituicao=r.get('instituicao', ''),
+                meta_ira=float(r.get('meta_ira', 0.0)) if r.get('meta_ira') else 0.0
             )
         return None
 
@@ -121,7 +132,10 @@ class BancoDados:
         nova_senha_hash = generate_password_hash(nova_senha_plana)
         
         try:
-            cursor.execute("UPDATE usuarios SET senha = %s WHERE email = %s", (nova_senha_hash, email))
+            cursor.execute(
+                "UPDATE usuarios SET senha = %s WHERE email = %s",
+                (nova_senha_hash, email)
+            )
             conexao.commit()
             sucesso = cursor.rowcount > 0
         except Exception as e:
@@ -130,6 +144,50 @@ class BancoDados:
         finally:
             cursor.close()
             
+        return sucesso
+
+    @staticmethod
+    def obter_usuario(usuario_id):
+        cursor, _ = BancoDados._get_cursor()
+        if not cursor: return None
+        
+        cursor.execute("SELECT * FROM usuarios WHERE id = %s", (usuario_id,))
+        r = cursor.fetchone()
+        cursor.close()
+        
+        if r:
+            return Usuario(
+                nome=r.get('nome', 'Aluno'),
+                curso=r.get('curso', ''),
+                carga_horaria_total=r.get('carga_horaria_total', 0),
+                semestres_totais=r.get('semestres_totais', 0),
+                ira=r.get('ira', 0.0),
+                semestres_cursados=r.get('semestres_cursados', 0),
+                id=r.get('id'),
+                instituicao=r.get('instituicao', ''),
+                meta_ira=float(r.get('meta_ira', 0.0)) if r.get('meta_ira') else 0.0
+            )
+        return None
+
+    @staticmethod
+    def atualizar_perfil(usuario_id, instituicao, curso, semestres_totais, carga_horaria_total, meta_ira):
+        cursor, conexao = BancoDados._get_cursor()
+        if not cursor: return False
+        
+        try:
+            cursor.execute(
+                """UPDATE usuarios 
+                   SET instituicao=%s, curso=%s, semestres_totais=%s, carga_horaria_total=%s, meta_ira=%s
+                   WHERE id=%s""",
+                (instituicao, curso, semestres_totais, carga_horaria_total, meta_ira, usuario_id)
+            )
+            conexao.commit()
+            sucesso = True
+        except Exception as e:
+            print(f"Erro ao atualizar perfil: {e}")
+            sucesso = False
+        finally:
+            cursor.close()
         return sucesso
 
     # --- DAOs para Semestres ---

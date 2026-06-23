@@ -1,6 +1,6 @@
 class Usuario:
     """Entidade de Domínio: Representa o aluno e suas configurações acadêmicas globais."""
-    def __init__(self, nome: str, curso: str, carga_horaria_total: int, semestres_totais: int, ira: float = 0.0, semestres_cursados: int = 0, id: int = None):
+    def __init__(self, nome: str, curso: str, carga_horaria_total: int, semestres_totais: int, ira: float = 0.0, semestres_cursados: int = 0, id: int = None, instituicao: str = '', meta_ira: float = 0.0):
         self.id = id
         self.nome = nome
         self.curso = curso
@@ -8,6 +8,8 @@ class Usuario:
         self.semestres_totais = semestres_totais
         self.ira = ira
         self.semestres_cursados = semestres_cursados
+        self.instituicao = instituicao
+        self.meta_ira = meta_ira
     
     def to_dict(self):
         return {
@@ -18,4 +20,6 @@ class Usuario:
             "semestres_totais": self.semestres_totais,
             "ira": self.ira,
             "semestres_cursados": self.semestres_cursados,
+            "instituicao": self.instituicao,
+            "meta_ira": self.meta_ira,
         }
