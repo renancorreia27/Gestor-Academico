@@ -1,6 +1,10 @@
 import os
+from dotenv import load_dotenv
 import mysql.connector
 from mysql.connector import Error
+
+# Carrega as variáveis de ambiente do arquivo .env
+load_dotenv()
 
 class ConexaoMySQL:
     """Gerenciador de conexão com o MySQL utilizando o padrão Singleton."""

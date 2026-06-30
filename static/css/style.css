@@ -1,46 +1,137 @@
-/* Estilos globais e plano de fundo */
-body {
-    background-color: #f8f9fa;
+:root {
+    --bg-primary: #f8f9fa;
+    --card-bg: #ffffff;
+    --card-border: rgba(0, 0, 0, 0.08);
+    --sidebar-bg: #2c3e50;
+    --sidebar-link: #ecf0f1;
+    --sidebar-link-hover: #34495e;
+    --sidebar-link-active-text: #3498db;
+    --text-primary: #212529;
+    --text-secondary: #6c757d;
+    --card-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
 }
 
-/* Configuração do Menu Lateral (nav) */
+[data-bs-theme="dark"] {
+    --bg-primary: #18191a; /* Lighter neutral dark gray */
+    --card-bg: #242526; /* Lighter gray card */
+    --card-border: rgba(255, 255, 255, 0.1); 
+    --sidebar-bg: #18191a;
+    --sidebar-link: #e4e6eb; /* Very bright gray/white for links */
+    --sidebar-link-hover: #3a3b3c;
+    --sidebar-link-active-text: #4db8ff;
+    --text-primary: #f5f6f7; 
+    --text-secondary: #b0b3b8; /* Lighter gray for secondary text */
+    --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    
+    /* Override Bootstrap variables for secondary text so it stops looking faded */
+    --bs-secondary-color: #b0b3b8;
+    --bs-tertiary-color: #b0b3b8;
+    --bs-body-color: #f5f6f7;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Sidebar Custom Styling */
 .sidebar {
     height: 100vh;
-    background-color: #2c3e50;
-    color: white;
+    background-color: var(--sidebar-bg);
+    border-right: 1px solid var(--card-border);
     position: sticky;
     top: 0;
+    z-index: 100;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    box-shadow: 2px 0 12px rgba(0, 0, 0, 0.05);
 }
 
 .sidebar a {
-    color: #ecf0f1;
+    color: var(--sidebar-link);
     text-decoration: none;
-    padding: 12px 15px;
-    display: block;
-    border-radius: 5px;
-    margin-bottom: 5px;
-    transition: background 0.3s;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    border-radius: 8px;
+    margin-bottom: 6px;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
 }
 
-.sidebar a:hover, 
+.sidebar a:hover {
+    background-color: var(--sidebar-link-hover);
+    color: #ffffff;
+}
+
 .sidebar a.active {
-    background-color: #34495e;
-    color: #3498db;
+    background-color: var(--sidebar-link-hover);
+    color: var(--sidebar-link-active-text);
+    font-weight: 600;
+    position: relative;
 }
 
-/* Customização dos Cartões da Interface */
+.sidebar a.active::before {
+    content: '';
+    position: absolute;
+    left: -8px;
+    top: 15%;
+    height: 70%;
+    width: 4px;
+    background-color: var(--sidebar-link-active-text);
+    border-radius: 0 4px 4px 0;
+}
+
+/* Clean custom cards */
 .card-custom {
-    border: none;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-    transition: transform 0.2s;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    box-shadow: var(--card-shadow);
+    transition: box-shadow 0.2s ease, background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .card-custom:hover {
-    transform: translateY(-5px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
 }
 
-/* Indicadores laterais coloridos para destaques rápidos */
-.border-left-primary { border-left: 5px solid #0d6efd !important; }
-.border-left-success { border-left: 5px solid #198754 !important; }
-.border-left-danger { border-left: 5px solid #dc3545 !important; }
+[data-bs-theme="dark"] .card-custom:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+}
+
+/* Border left indicators for stats */
+.border-left-primary { border-left: 4px solid #0d6efd !important; }
+.border-left-success { border-left: 4px solid #198754 !important; }
+.border-left-danger { border-left: 4px solid #dc3545 !important; }
+
+/* Custom Form elements */
+.form-control, .form-select {
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 0 0.25rem rgba(52, 152, 219, 0.15);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.12);
+    border-radius: 10px;
+}
+[data-bs-theme="dark"] ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.12);
+}
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.22);
+}

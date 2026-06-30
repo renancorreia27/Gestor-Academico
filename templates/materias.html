@@ -2,14 +2,25 @@
 
 {% block content %}
 <header class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-4 pt-4 border-bottom">
-    <h1 class="h2">Gerenciar Disciplinas</h1>
+    <h1 class="h3 mb-0 fw-bold text-dark-emphasis"><i class="bi bi-book-fill text-primary me-2"></i>Gerenciar Disciplinas</h1>
+    
+    <div class="d-flex align-items-center gap-3">
+        <!-- Botão de Alternar Tema (☀️ / 🌙) -->
+        <button id="themeToggleBtn" class="btn btn-link text-decoration-none p-2 border rounded-circle bg-body-tertiary flex-shrink-0" title="Alternar Tema" style="width: 40px; height: 40px; display: inline-flex; align-items: center; justify-content: center; border-color: var(--card-border) !important;">
+            <i class="bi bi-moon-fill text-secondary fs-5"></i>
+        </button>
+        <a href="{{ url_for('logout') }}" class="btn btn-outline-danger fw-semibold d-flex align-items-center gap-2 rounded-pill px-3 flex-shrink-0" style="height: 40px;">
+            <i class="bi bi-box-arrow-right"></i> Sair
+        </a>
+    </div>
 </header>
 
 <main class="flex-grow-1">
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
         {% for category, message in messages %}
-          <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+          <div class="alert alert-{{ category }} alert-dismissible fade show border-0 shadow-sm mb-4" role="alert">
+            <i class="bi {% if category == 'success' %}bi-check-circle-fill text-success{% else %}bi-exclamation-triangle-fill text-danger{% endif %} me-2"></i>
             {{ message }}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
           </div>
@@ -19,33 +30,49 @@
 
     {% if semestres_com_materias %}
         {% for item in semestres_com_materias %}
-            <h4 class="mt-4 mb-3 text-primary border-bottom pb-2">{{ item.semestre.nome }}</h4>
+            <h5 class="mt-4 mb-3 fw-bold text-dark-emphasis border-bottom pb-2">
+                <i class="bi bi-folder-fill text-primary me-2"></i>{{ item.semestre.nome }}
+            </h5>
             <div class="row">
                 {% if item.materias %}
                     {% for materia in item.materias %}
                     <div class="col-md-4 mb-4">
-                        <div class="card card-custom h-100">
-                            <div class="card-body d-flex flex-column">
-                                <div class="d-flex justify-content-between align-items-start mb-2">
-                                    <h5 class="card-title fw-bold">{{ materia.nome }}</h5>
-                                    <form method="POST" action="{{ url_for('deletar_materia', id=materia.id) }}" onsubmit="return confirm('Tem certeza que deseja excluir esta disciplina e suas notas?');">
-                                        <button type="submit" class="btn btn-link text-danger p-0" title="Excluir Disciplina">
-                                            <i class="bi bi-trash3-fill"></i>
-                                        </button>
-                                    </form>
-                                </div>
-                                <p class="card-text text-muted small mb-3">Carga Horária: {{ materia.carga_horaria }}h</p>
-                                
-                                <div class="mt-auto">
-                                    <div class="d-flex justify-content-between mb-1 small">
-                                        <span>Média Atual:</span>
-                                        <span class="fw-bold">{{ "%.2f"|format(materia.media) }}</span>
-                                    </div>
-                                    <div class="d-flex justify-content-between mb-3 small">
-                                        <span>Faltas:</span>
-                                        <span class="fw-bold">{{ materia.faltas }} / {{ materia.max_faltas }}</span>
+                        <div class="card card-custom h-100 d-flex flex-column justify-content-between">
+                            <div class="card-body p-3 d-flex flex-column justify-content-between">
+                                <div>
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <h6 class="card-title fw-bold text-dark-emphasis mb-0 text-truncate" style="max-width: 80%;" title="{{ materia.nome }}">{{ materia.nome }}</h6>
+                                        <form method="POST" action="{{ url_for('deletar_materia', id=materia.id) }}" onsubmit="return confirm('Tem certeza que deseja excluir esta disciplina, suas notas e suas faltas? Esta ação é irreversível.');">
+                                            <button type="submit" class="btn btn-link text-danger p-0 border-0" title="Excluir Disciplina">
+                                                <i class="bi bi-trash-fill fs-5"></i>
+                                            </button>
+                                        </form>
                                     </div>
                                     
+
+                                    <!-- Grade Progress -->
+                                    {% set media_porc = (materia.media / 10 * 100) if materia.media else 0 %}
+                                    <div class="mt-3">
+                                        <div class="d-flex justify-content-between mb-1 small">
+                                            <span class="text-secondary small">Média Parcial:</span>
+                                            <span class="{% if materia.media >= materia.media_necessaria %}text-success{% else %}text-warning{% endif %} fw-bold">{{ "%.2f"|format(materia.media) }} / {{ "%.1f"|format(materia.media_necessaria) }}</span>
+                                        </div>
+                                        <div class="progress" style="height: 5px; background-color: var(--card-border);">
+                                            <div class="progress-bar {% if materia.media >= materia.media_necessaria %}bg-success{% else %}bg-warning{% endif %}" role="progressbar" style="width: {{ media_porc }}%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Absences Progress -->
+                                {% set faltas_porc = (materia.faltas / materia.max_faltas * 100) if materia.max_faltas else 0 %}
+                                <div class="mt-3">
+                                    <div class="d-flex justify-content-between mb-1 small">
+                                        <span class="text-secondary small">Faltas:</span>
+                                        <span class="{% if materia.faltas >= (materia.max_faltas * 0.75) %}text-danger fw-bold{% else %}text-dark-emphasis{% endif %} fw-bold">{{ materia.faltas }} / {{ materia.max_faltas }}</span>
+                                    </div>
+                                    <div class="progress" style="height: 6px; background-color: var(--card-border);">
+                                        <div class="progress-bar {% if materia.faltas >= materia.max_faltas %}bg-danger{% elif materia.faltas >= (materia.max_faltas * 0.7) %}bg-warning{% else %}bg-info{% endif %}" role="progressbar" style="width: {{ faltas_porc if faltas_porc <= 100 else 100 }}%"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -53,15 +80,18 @@
                     {% endfor %}
                 {% else %}
                     <div class="col-12 mb-4">
-                        <p class="text-muted small">Nenhuma disciplina cadastrada neste semestre.</p>
+                        <p class="text-muted small italic ms-1"><i class="bi bi-info-circle me-1"></i>Nenhuma disciplina cadastrada neste semestre.</p>
                     </div>
                 {% endif %}
             </div>
         {% endfor %}
     {% else %}
-        <div class="text-center py-5">
-            <p class="text-muted">Você ainda não tem nenhum semestre criado.</p>
-            <a href="{{ url_for('semestres') }}" class="btn btn-outline-primary">Ir para Semestres</a>
+        <div class="card card-custom text-center py-5">
+            <div class="card-body">
+                <div class="display-6 text-muted mb-3"><i class="bi bi-calendar-x"></i></div>
+                <p class="text-muted mb-3">Você ainda não tem nenhum semestre criado.</p>
+                <a href="{{ url_for('semestres') }}" class="btn btn-primary rounded-pill px-4 fw-semibold shadow-sm">Ir para Semestres</a>
+            </div>
         </div>
     {% endif %}
 </main>

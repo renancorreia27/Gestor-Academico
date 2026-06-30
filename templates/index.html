@@ -1,24 +1,62 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<header class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-4 pt-4 border-bottom">
-    <div class="d-flex align-items-center">
-        <h1 class="h2 me-4">Dashboard</h1>
-        <form method="GET" action="{{ url_for('dashboard') }}" class="d-flex align-items-center me-2">
-            <select name="semestre_id" class="form-select form-select-sm" onchange="this.form.submit()">
-                {% for s in semestres %}
-                <option value="{{ s.id }}" {% if semestre_atual and s.id|string == semestre_atual.id|string %}selected{% endif %}>{{ s.nome }}</option>
-                {% endfor %}
-            </select>
-        </form>
-        <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalNovoSemestre">
-            <i class="bi bi-plus-circle"></i> Semestre
-        </button>
+<header class="pb-2 mb-4 pt-4 border-bottom">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <div class="d-flex align-items-center gap-2 flex-wrap">
+            <h1 class="h3 mb-0 fw-bold text-dark-emphasis"><i class="bi bi-grid-1x2-fill text-primary me-2"></i>Painel</h1>
+            
+            <form method="GET" action="{{ url_for('dashboard') }}" class="d-flex align-items-center ms-2">
+                <select name="semestre_id" class="form-select form-select-sm fw-semibold" onchange="this.form.submit()" style="max-width: 220px;">
+                    {% for s in semestres %}
+                    <option value="{{ s.id }}" {% if semestre_atual and s.id|string == semestre_atual.id|string %}selected{% endif %}>{{ s.nome }}</option>
+                    {% endfor %}
+                </select>
+            </form>
+            
+            <button class="btn btn-sm btn-outline-primary fw-semibold rounded-pill px-3 ms-2" data-bs-toggle="modal" data-bs-target="#modalNovoSemestre">
+                <i class="bi bi-plus-circle me-1"></i> Novo Semestre
+            </button>
+        </div>
+        <div class="d-flex align-items-center gap-3">
+            <!-- Botão de Alternar Tema (☀️ / 🌙) -->
+            <button id="themeToggleBtn" class="btn btn-link text-decoration-none p-2 border rounded-circle bg-body-tertiary flex-shrink-0" title="Alternar Tema" style="width: 40px; height: 40px; display: inline-flex; align-items: center; justify-content: center; border-color: var(--card-border) !important;">
+                <i class="bi bi-moon-fill text-secondary fs-5"></i>
+            </button>
+            <a href="{{ url_for('logout') }}" class="btn btn-outline-danger fw-semibold d-flex align-items-center gap-2 rounded-pill px-3 flex-shrink-0" style="height: 40px;">
+                <i class="bi bi-box-arrow-right"></i> Sair
+            </a>
+            
+            <div class="d-flex align-items-center gap-2">
+                <span class="text-secondary small">Olá, <strong class="text-primary-emphasis">{{ session.user_name.split(' ')[0] if session.get('user_name') else 'Usuário' }}</strong></span>
+                <div class="bg-primary-subtle text-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+                    <i class="bi bi-person-fill fs-5"></i>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="d-flex align-items-center">
-        <span class="me-3 text-muted">Olá, <strong>{{ session.user_name.split(' ')[0] if session.get('user_name') else 'Usuário' }}</strong></span>
-        <i class="bi bi-person-circle fs-3 text-secondary"></i>
+    
+    <!-- Informações Acadêmicas e Progresso Discretos -->
+    {% if usuario.curso %}
+    <div class="mt-2 d-flex justify-content-between align-items-center flex-wrap gap-2 text-secondary small">
+        <div>
+            <i class="bi bi-mortarboard-fill me-1 text-primary"></i> <strong>{{ usuario.curso }}</strong>
+            {% if usuario.instituicao %}
+            <span class="text-muted mx-1">|</span> <i class="bi bi-building me-1"></i> {{ usuario.instituicao }}
+            {% endif %}
+        </div>
+        {% if usuario.semestres_totais %}
+            {% set progresso = ((semestres|length) / usuario.semestres_totais * 100) if usuario.semestres_totais else 0 %}
+            <div class="d-flex align-items-center gap-2" style="width: 280px;">
+                <span class="text-muted text-nowrap small">Progresso do Curso ({{ semestres|length }}/{{ usuario.semestres_totais }} sem.):</span>
+                <div class="progress flex-grow-1" style="height: 5px; background-color: var(--card-border);">
+                    <div class="progress-bar bg-primary" role="progressbar" style="width: {{ progresso }}%"></div>
+                </div>
+                <span class="fw-bold small">{{ "%.0f"|format(progresso) }}%</span>
+            </div>
+        {% endif %}
     </div>
+    {% endif %}
 </header>
 
 <main class="flex-grow-1">
@@ -26,7 +64,8 @@
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
         {% for category, message in messages %}
-          <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+          <div class="alert alert-{{ category }} alert-dismissible fade show border-0 shadow-sm mb-4" role="alert">
+            <i class="bi {% if category == 'success' %}bi-check-circle-fill text-success{% elif category == 'danger' %}bi-exclamation-triangle-fill text-danger{% else %}bi-info-circle-fill text-info{% endif %} me-2"></i>
             {{ message }}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
           </div>
@@ -34,180 +73,356 @@
       {% endif %}
     {% endwith %}
 
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="card bg-primary text-white shadow-sm border-0" style="border-radius: 1rem;">
-                <div class="card-body p-4 d-flex justify-content-between align-items-center flex-wrap gap-3">
-                    <div>
-                        <h4 class="mb-1 fw-bold">{{ usuario.curso }}</h4>
-                        <p class="mb-0" style="color: rgba(255,255,255,0.8);"><i class="bi bi-building me-1"></i> {{ usuario.instituicao }}</p>
-                    </div>
-                    {% set semestres_completos = 0 %}
-                    {% for s in semestres %}
-                        {% if s.situacao == 'Finalizado' %}
-                            {% set semestres_completos = semestres_completos + 1 %}
-                        {% endif %}
-                    {% endfor %}
-                    {% set progresso = ((semestres|length) / usuario.semestres_totais * 100) if usuario.semestres_totais else 0 %}
-                    <div class="text-end" style="min-width: 250px;">
-                        <p class="mb-1 small" style="color: rgba(255,255,255,0.8);">Progresso do Curso ({{ semestres|length }} de {{ usuario.semestres_totais }} semestres)</p>
-                        <div class="progress" style="height: 8px; background-color: rgba(255,255,255,0.2);">
-                            <div class="progress-bar bg-white" role="progressbar" style="width: {{ progresso }}%"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <div class="row mb-4">
-        <div class="col-md-4 mb-3">
-            <div class="card card-custom border-left-primary h-100">
-                <div class="card-body">
-                    <h6 class="text-muted text-uppercase mb-2">IRA Geral</h6>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h3 class="mb-0 fw-bold text-dark">{{ "%.2f"|format(ira_geral) }}</h3>
-                        {% if usuario.meta_ira > 0 %}
-                            {% if ira_geral >= usuario.meta_ira %}
-                                <span class="badge bg-success rounded-pill px-3 py-2"><i class="bi bi-trophy-fill me-1"></i> Meta ({{ "%.1f"|format(usuario.meta_ira) }})</span>
-                            {% else %}
-                                <span class="badge bg-light text-secondary border rounded-pill px-3 py-2"><i class="bi bi-bullseye me-1"></i> Meta: {{ "%.1f"|format(usuario.meta_ira) }}</span>
-                            {% endif %}
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 mb-3">
-            <div class="card card-custom border-left-success h-100">
-                <div class="card-body">
-                    <h6 class="text-muted text-uppercase mb-2">Semestre Atual</h6>
-                    <h3 class="mb-0 fw-bold text-dark">{{ semestre_atual.nome if semestre_atual else 'Nenhum' }}</h3>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 mb-3">
-            <div class="card card-custom border-left-danger h-100">
-                <div class="card-body">
-                    <h6 class="text-muted text-uppercase mb-2">Total de Faltas (Semestre)</h6>
-                    <h3 class="mb-0 fw-bold text-dark">
-                        {% set ns = namespace(total=0) %}
-                        {% for m in materias %}
-                            {% set ns.total = ns.total + m.faltas %}
-                        {% endfor %}
-                        {{ ns.total }}
-                    </h3>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!-- Dashboard Tabs -->
+    <ul class="nav nav-tabs mb-4 border-bottom-0" id="dashboardTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active fw-bold text-secondary px-4 py-3 border-0 border-bottom border-3" style="border-radius: 0;" id="visao-geral-tab" data-bs-toggle="tab" data-bs-target="#visao-geral-pane" type="button" role="tab" aria-selected="true" onclick="this.classList.add('border-primary', 'text-primary'); this.classList.remove('text-secondary', 'border-transparent'); document.getElementById('disciplinas-tab').classList.remove('border-primary', 'text-primary'); document.getElementById('disciplinas-tab').classList.add('text-secondary', 'border-transparent');">
+                <i class="bi bi-pie-chart-fill me-2"></i>Métricas e Resumo
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link fw-bold text-secondary px-4 py-3 border-0 border-bottom border-3 border-transparent" style="border-radius: 0;" id="disciplinas-tab" data-bs-toggle="tab" data-bs-target="#disciplinas-pane" type="button" role="tab" aria-selected="false" onclick="this.classList.add('border-primary', 'text-primary'); this.classList.remove('text-secondary', 'border-transparent'); document.getElementById('visao-geral-tab').classList.remove('border-primary', 'text-primary'); document.getElementById('visao-geral-tab').classList.add('text-secondary', 'border-transparent');">
+                <i class="bi bi-journal-bookmark-fill me-2"></i>Disciplinas
+            </button>
+        </li>
+    </ul>
 
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h4 class="mb-0">Disciplinas em Curso</h4>
-        {% if semestre_atual %}
-        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalNovaMateria">
-            <i class="bi bi-plus-circle me-1"></i> Nova Disciplina
-        </button>
-        {% endif %}
-    </div>
-    <div class="row">
-        {% if materias %}
-            {% for materia in materias %}
-            <div class="col-md-4 mb-4">
-                <div class="card card-custom h-100">
-                    <div class="card-body d-flex flex-column">
-                        <div class="d-flex justify-content-between align-items-start mb-2">
-                            <h5 class="card-title fw-bold">{{ materia.nome }}</h5>
-                            {% if materia.media >= materia.media_necessaria %}
-                                <span class="badge bg-success rounded-pill">Aprovada</span>
-                            {% else %}
-                                <span class="badge bg-primary rounded-pill">Ativa</span>
-                            {% endif %}
+    <div class="tab-content" id="dashboardTabsContent">
+        <!-- TAB 1: VISÃO GERAL -->
+        <div class="tab-pane fade show active" id="visao-geral-pane" role="tabpanel" aria-labelledby="visao-geral-tab" tabindex="0">
+            <!-- Row of metrics -->
+            <div class="row mb-4">
+                <div class="col-md-4 mb-3">
+                    <div class="card card-custom border-left-primary h-100">
+                        <div class="card-body p-3 d-flex flex-column justify-content-between">
+                            <div>
+                                <h6 class="text-muted text-uppercase small fw-bold mb-2">IRA Geral</h6>
+                                <div class="d-flex align-items-baseline gap-2">
+                                    <h3 class="mb-0 fw-bold text-dark-emphasis">{{ "%.2f"|format(ira_geral) }}</h3>
+                                    <span class="text-muted small">acumulado</span>
+                                </div>
+                            </div>
+                            <div class="mt-3">
+                                {% if usuario.meta_ira > 0 %}
+                                    <div class="d-flex justify-content-between align-items-center mb-1 small">
+                                        <span class="text-muted">Meta: {{ "%.1f"|format(usuario.meta_ira) }}</span>
+                                        {% if ira_geral >= usuario.meta_ira %}
+                                            <span class="text-success fw-bold"><i class="bi bi-trophy-fill me-1"></i>Meta Atingida</span>
+                                        {% else %}
+                                            <span class="text-warning fw-semibold">Faltam {{ "%.2f"|format(usuario.meta_ira - ira_geral) }}</span>
+                                        {% endif %}
+                                    </div>
+                                    <div class="progress" style="height: 4px;">
+                                        {% set pct_meta = (ira_geral / usuario.meta_ira * 100) if usuario.meta_ira else 0 %}
+                                        <div class="progress-bar {% if ira_geral >= usuario.meta_ira %}bg-success{% else %}bg-primary{% endif %}" role="progressbar" style="width: {{ pct_meta if pct_meta <= 100 else 100 }}%"></div>
+                                    </div>
+                                {% else %}
+                                    <span class="text-muted small"><i class="bi bi-info-circle me-1"></i>Defina uma meta no Perfil</span>
+                                {% endif %}
+                            </div>
                         </div>
-                        <p class="card-text text-muted small mb-3">Carga Horária: {{ materia.carga_horaria }}h</p>
-                        <div class="mt-auto">
-                            <div class="d-flex justify-content-between mb-1 small">
-                                <span>Média Parcial:</span>
-                                <span class="{% if materia.media >= materia.media_necessaria %}text-success{% else %}text-warning{% endif %} fw-bold">{{ "%.2f"|format(materia.media) }} / {{ "%.2f"|format(materia.media_necessaria) }}</span>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card card-custom border-left-success h-100">
+                        <div class="card-body p-3 d-flex flex-column justify-content-between">
+                            <div>
+                                <h6 class="text-muted text-uppercase small fw-bold mb-2">Semestre Focado</h6>
+                                <h3 class="mb-0 fw-bold text-dark-emphasis text-truncate">{{ semestre_atual.nome if semestre_atual else 'Nenhum' }}</h3>
                             </div>
-                            <div class="d-flex justify-content-between mb-3 small">
-                                <span>Faltas:</span>
-                                <span class="{% if materia.faltas >= materia.max_faltas %}text-danger{% else %}text-dark{% endif %} fw-bold">{{ materia.faltas }} / {{ materia.max_faltas }}</span>
+                            <div class="mt-3">
+                                {% if semestre_atual %}
+                                    {% if semestre_atual.situacao == 'Não Iniciado' %}
+                                        <span class="badge bg-secondary-subtle text-secondary-emphasis"><i class="bi bi-clock me-1"></i>Não Iniciado</span>
+                                    {% elif semestre_atual.situacao == 'Em Andamento' %}
+                                        <span class="badge bg-primary-subtle text-primary"><i class="bi bi-play-circle me-1"></i>Em Andamento</span>
+                                    {% else %}
+                                        <span class="badge bg-success-subtle text-success"><i class="bi bi-check-circle me-1"></i>Finalizado</span>
+                                    {% endif %}
+                                {% else %}
+                                    <span class="text-muted small">Crie um semestre para começar</span>
+                                {% endif %}
                             </div>
-                            <button class="btn btn-outline-primary btn-sm w-100" data-bs-toggle="modal" data-bs-target="#modalGerirMateria{{ materia.id }}">
-                                <i class="bi bi-pencil-square me-1"></i> Gerir
-                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card card-custom border-left-danger h-100">
+                        <div class="card-body p-3 d-flex flex-column justify-content-between">
+                            <div>
+                                <h6 class="text-muted text-uppercase small fw-bold mb-2">Total de Faltas (Semestre)</h6>
+                                {% set ns = namespace(total=0, total_max=0) %}
+                                {% for m in materias %}
+                                    {% set ns.total = ns.total + m.faltas %}
+                                    {% set ns.total_max = ns.total_max + m.max_faltas %}
+                                {% endfor %}
+                                <h3 class="mb-0 fw-bold text-dark-emphasis">{{ ns.total }} faltas</h3>
+                            </div>
+                            <div class="mt-3">
+                                {% if materias %}
+                                    {% set pct_faltas = (ns.total / ns.total_max * 100) if ns.total_max else 0 %}
+                                    <div class="d-flex justify-content-between align-items-center mb-1 small">
+                                        <span class="text-muted">Limite total: {{ ns.total_max }} faltas</span>
+                                        <span class="{% if pct_faltas >= 75 %}text-danger fw-bold{% elif pct_faltas >= 50 %}text-warning fw-semibold{% else %}text-success{% endif %}">{{ "%.0f"|format(pct_faltas) }}%</span>
+                                    </div>
+                                    <div class="progress" style="height: 4px;">
+                                        <div class="progress-bar {% if pct_faltas >= 75 %}bg-danger{% elif pct_faltas >= 50 %}bg-warning{% else %}bg-info{% endif %}" role="progressbar" style="width: {{ pct_faltas if pct_faltas <= 100 else 100 }}%"></div>
+                                    </div>
+                                {% else %}
+                                    <span class="text-muted small">Nenhuma disciplina cadastrada</span>
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            
-            <!-- Modal Gerir Materia -->
-            <div class="modal fade" id="modalGerirMateria{{ materia.id }}" tabindex="-1" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Gerir {{ materia.nome }}</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+            <!-- Chart.js Performance Row -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card card-custom">
+                        <div class="card-body p-3">
+                            <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
+                                <h6 class="fw-bold mb-0 text-dark-emphasis"><i class="bi bi-bar-chart-fill text-primary me-2"></i>Aproveitamento por Disciplina</h6>
+                                <small class="text-muted small">Visualização de Médias</small>
+                            </div>
+                            <div style="position: relative; height: 200px; width: 100%;">
+                                <canvas id="disciplinasChart"></canvas>
+                            </div>
                         </div>
-                        <div class="modal-body">
-                            <h6 class="fw-bold mb-3">Adicionar Nota</h6>
-                            <form method="POST" action="{{ url_for('adicionar_nota', id=materia.id) }}" class="mb-4">
-                                <input type="hidden" name="semestre_id" value="{{ semestre_atual.id }}">
-                                <div class="row g-2">
-                                    <div class="col-6">
-                                        <input type="number" step="0.01" class="form-control" name="valor" placeholder="Valor (ex: 8.5)" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: DISCIPLINAS -->
+        <div class="tab-pane fade" id="disciplinas-pane" role="tabpanel" aria-labelledby="disciplinas-tab" tabindex="0">
+            <!-- Disciplines Header -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="mb-0 fw-bold text-dark-emphasis">Disciplinas Deste Semestre</h5>
+                {% if semestre_atual %}
+                <button class="btn btn-primary btn-sm rounded-pill px-3 fw-semibold shadow-sm" data-bs-toggle="modal" data-bs-target="#modalNovaMateria">
+                    <i class="bi bi-plus-circle me-1"></i> Nova Disciplina
+                </button>
+                {% endif %}
+            </div>
+
+            <!-- Disciplines Grid -->
+            <div class="row">
+                {% if materias %}
+                    {% for materia in materias %}
+                    <div class="col-md-4 mb-4">
+                        <div class="card card-custom h-100 d-flex flex-column justify-content-between">
+                            <div class="card-body p-3 d-flex flex-column justify-content-between">
+                                <div>
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <h6 class="card-title fw-bold text-dark-emphasis mb-0 text-truncate" style="max-width: 70%;" title="{{ materia.nome }}">{{ materia.nome }}</h6>
+                                        
+                                        {% if materia.faltas >= materia.max_faltas %}
+                                            <span class="badge bg-danger-subtle text-danger rounded-pill">Faltas Estouradas</span>
+                                        {% elif materia.media >= materia.media_necessaria %}
+                                            <span class="badge bg-success-subtle text-success rounded-pill">Aprovado</span>
+                                        {% else %}
+                                            <span class="badge bg-primary-subtle text-primary rounded-pill">Em Curso</span>
+                                        {% endif %}
                                     </div>
-                                    <div class="col-4">
-                                        <input type="number" step="0.01" class="form-control" name="peso" placeholder="Peso" value="1.0" required>
+                                    
+                                    <!-- Grade Progress (Média Parcial) -->
+                                    {% set media_porc = (materia.media / 10 * 100) if materia.media else 0 %}
+                                    <div class="mt-3">
+                                        <div class="d-flex justify-content-between mb-1 small">
+                                            <span class="text-secondary small">Média Parcial:</span>
+                                            <span class="{% if materia.media >= materia.media_necessaria %}text-success{% else %}text-warning{% endif %} fw-bold">{{ "%.2f"|format(materia.media) }} / {{ "%.1f"|format(materia.media_necessaria) }}</span>
+                                        </div>
+                                        <div class="progress" style="height: 6px; background-color: var(--card-border);">
+                                            <div class="progress-bar {% if materia.media >= materia.media_necessaria %}bg-success{% else %}bg-warning{% endif %}" role="progressbar" style="width: {{ media_porc }}%"></div>
+                                        </div>
                                     </div>
-                                    <div class="col-2">
-                                        <button type="submit" class="btn btn-success w-100"><i class="bi bi-check2"></i></button>
+                                    
+                                    <!-- Absences Progress -->
+                                    {% set faltas_porc = (materia.faltas / materia.max_faltas * 100) if materia.max_faltas else 0 %}
+                                    <div class="mt-3">
+                                        <div class="d-flex justify-content-between mb-1 small">
+                                            <span class="text-secondary small">Faltas:</span>
+                                            <span class="{% if materia.faltas >= (materia.max_faltas * 0.75) %}text-danger fw-bold{% else %}text-dark-emphasis{% endif %} fw-bold">{{ materia.faltas }} / {{ materia.max_faltas }}</span>
+                                        </div>
+                                        <div class="progress" style="height: 6px; background-color: var(--card-border);">
+                                            <div class="progress-bar {% if materia.faltas >= materia.max_faltas %}bg-danger{% elif materia.faltas >= (materia.max_faltas * 0.7) %}bg-warning{% else %}bg-info{% endif %}" role="progressbar" style="width: {{ faltas_porc if faltas_porc <= 100 else 100 }}%"></div>
+                                        </div>
                                     </div>
                                 </div>
-                            </form>
+                            </div>
                             
-                            <h6 class="fw-bold mb-3">Adicionar Falta</h6>
-                            <form method="POST" action="{{ url_for('adicionar_falta', id=materia.id) }}">
-                                <input type="hidden" name="semestre_id" value="{{ semestre_atual.id }}">
-                                <div class="row g-2">
-                                    <div class="col-10">
-                                        <input type="number" class="form-control" name="qtd" placeholder="Quantidade (ex: 2)" value="1" required>
-                                    </div>
-                                    <div class="col-2">
-                                        <button type="submit" class="btn btn-warning w-100"><i class="bi bi-check2"></i></button>
-                                    </div>
-                                </div>
-                            </form>
+                            <div class="card-footer bg-transparent border-0 p-3 pt-0">
+                                <button class="btn btn-outline-primary btn-sm w-100 fw-semibold rounded-pill" data-bs-toggle="modal" data-bs-target="#modalGerirMateria{{ materia.id }}">
+                                    <i class="bi bi-sliders me-1"></i> Detalhes & Lançar
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
+                    
+                    <!-- Modal Gerir Materia (TABS) -->
+                    <div class="modal fade" id="modalGerirMateria{{ materia.id }}" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content border-0 shadow" style="border-radius: 1rem;">
+                                <div class="modal-header border-bottom-0 pb-0">
+                                    <h5 class="modal-title fw-bold text-dark-emphasis">{{ materia.nome }}</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body pt-3">
+                                    
+                                    <!-- Tabs Navigation -->
+                                    <ul class="nav nav-pills nav-justified mb-3 p-1 bg-light rounded-pill" id="materiaTabs{{ materia.id }}" role="tablist" style="border: 1px solid rgba(0,0,0,0.05);">
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link active rounded-pill py-2 small fw-semibold" id="notas-tab{{ materia.id }}" data-bs-toggle="tab" data-bs-target="#notas-pane{{ materia.id }}" type="button" role="tab" aria-selected="true">
+                                                <i class="bi bi-journal-text me-1"></i> Notas
+                                            </button>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link rounded-pill py-2 small fw-semibold" id="add-tab{{ materia.id }}" data-bs-toggle="tab" data-bs-target="#add-pane{{ materia.id }}" type="button" role="tab" aria-selected="false">
+                                                <i class="bi bi-plus-circle me-1"></i> Lançar
+                                            </button>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link rounded-pill py-2 small fw-semibold" id="sim-tab{{ materia.id }}" data-bs-toggle="tab" data-bs-target="#sim-pane{{ materia.id }}" type="button" role="tab" aria-selected="false">
+                                                <i class="bi bi-calculator me-1"></i> Simulador
+                                            </button>
+                                        </li>
+                                    </ul>
+                                    
+                                    <!-- Tabs Content -->
+                                    <div class="tab-content" id="materiaTabsContent{{ materia.id }}">
+                                        
+                                        <!-- Tab 1: Grades List -->
+                                        <div class="tab-pane fade show active" id="notas-pane{{ materia.id }}" role="tabpanel" aria-labelledby="notas-tab{{ materia.id }}">
+                                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                                <h6 class="fw-bold mb-0 text-secondary">Avaliações Lançadas</h6>
+                                                <span class="badge bg-primary rounded-pill">Média: {{ "%.2f"|format(materia.media) }}</span>
+                                            </div>
+                                            
+                                            <div class="list-group list-group-flush mb-2 overflow-auto" style="max-height: 220px;">
+                                                {% if materia.notas %}
+                                                    {% for nota in materia.notas %}
+                                                    <div class="list-group-item d-flex justify-content-between align-items-center bg-transparent border-bottom py-2 px-1">
+                                                        <div>
+                                                            <i class="bi bi-clipboard2-check text-primary me-2"></i>
+                                                            <span class="fw-bold text-dark-emphasis">{{ "%.2f"|format(nota.valor) }}</span>
+                                                            <span class="text-muted small ms-2">(Peso: {{ "%.2f"|format(nota.peso) }})</span>
+                                                        </div>
+                                                        <form method="POST" action="{{ url_for('deletar_nota', materia_id=materia.id, nota_id=nota.id) }}" onsubmit="return confirm('Tem certeza que deseja excluir esta nota? A média será recalculada.');">
+                                                            <input type="hidden" name="semestre_id" value="{{ semestre_atual.id }}">
+                                                            <button type="submit" class="btn btn-link text-danger p-0 m-0 border-0" title="Excluir Nota">
+                                                                <i class="bi bi-trash-fill fs-6"></i>
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                    {% endfor %}
+                                                {% else %}
+                                                    <div class="text-center py-4 text-muted">
+                                                        <i class="bi bi-journal-x fs-3 d-block mb-1 opacity-50"></i>
+                                                        <p class="small mb-0">Nenhuma nota cadastrada ainda.</p>
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Tab 2: Add Forms -->
+                                        <div class="tab-pane fade" id="add-pane{{ materia.id }}" role="tabpanel" aria-labelledby="add-tab{{ materia.id }}">
+                                            <!-- Add Grade -->
+                                            <h6 class="fw-bold mb-2 text-secondary"><i class="bi bi-pencil-square me-1"></i>Lançar Nota</h6>
+                                            <form method="POST" action="{{ url_for('adicionar_nota', id=materia.id) }}" class="mb-4">
+                                                <input type="hidden" name="semestre_id" value="{{ semestre_atual.id }}">
+                                                <div class="row g-2">
+                                                    <div class="col-5">
+                                                        <div class="form-floating">
+                                                            <input type="number" step="0.01" min="0" max="10" class="form-control" name="valor" id="valorNota{{ materia.id }}" placeholder="Nota" required>
+                                                            <label for="valorNota{{ materia.id }}">Nota</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-5">
+                                                        <div class="form-floating">
+                                                            <input type="number" step="0.01" min="0.1" class="form-control" name="peso" id="pesoNota{{ materia.id }}" placeholder="Peso" value="1.0" required>
+                                                            <label for="pesoNota{{ materia.id }}">Peso</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-2 d-flex align-items-stretch">
+                                                        <button type="submit" class="btn btn-success w-100 rounded-3"><i class="bi bi-plus-lg fs-5"></i></button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                            
+                                            <!-- Manage Absence -->
+                                            <h6 class="fw-bold mb-2 text-secondary mt-3"><i class="bi bi-calendar-x me-1"></i>Gerenciar Faltas</h6>
+                                            <form method="POST" action="{{ url_for('adicionar_falta', id=materia.id) }}">
+                                                <input type="hidden" name="semestre_id" value="{{ semestre_atual.id }}">
+                                                <div class="row g-2">
+                                                    <div class="col-8">
+                                                        <div class="form-floating">
+                                                            <input type="number" min="1" class="form-control" name="qtd" id="qtdFalta{{ materia.id }}" placeholder="Quantidade" value="1" required>
+                                                            <label for="qtdFalta{{ materia.id }}">Qtd. de Faltas</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-4 d-flex align-items-stretch gap-1">
+                                                        <button type="submit" class="btn btn-warning flex-grow-1 text-white rounded-3" title="Adicionar Falta"><i class="bi bi-plus-lg"></i></button>
+                                                        <button type="submit" formaction="{{ url_for('remover_falta', id=materia.id) }}" class="btn btn-outline-secondary flex-grow-1 rounded-3" title="Remover Falta"><i class="bi bi-dash-lg"></i></button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        
+                                        <!-- Tab 3: Simulator -->
+                                        <div class="tab-pane fade" id="sim-pane{{ materia.id }}" role="tabpanel" aria-labelledby="sim-tab{{ materia.id }}">
+                                            <h6 class="fw-bold mb-2 text-secondary">Simulador de Nota Necessária</h6>
+                                            <p class="text-muted small mb-3">Simule quanto você precisa tirar na próxima prova (com base nos pesos) para alcançar a média necessária de aprovação.</p>
+                                            
+                                            <div class="mb-3">
+                                                <label class="form-label small fw-bold text-secondary">Qual o peso da próxima avaliação?</label>
+                                                <div class="input-group">
+                                                    <input type="number" id="pesoProx{{ materia.id }}" class="form-control" placeholder="Peso" value="1.0" step="0.1" min="0.1">
+                                                    <button type="button" class="btn btn-primary fw-semibold" onclick="calcularSimulador({{ materia.id }}, {{ materia.media_necessaria }})">Calcular</button>
+                                                </div>
+                                            </div>
+                                            <div id="resultadoSimulacao{{ materia.id }}" class="alert py-3 d-none border-0 shadow-sm" style="border-radius: 0.5rem;">
+                                                <!-- Resultado Dinâmico por JS -->
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="col-12 text-center py-5">
+                        <div class="card card-custom p-5">
+                            <div class="display-6 text-muted mb-3"><i class="bi bi-journal-x"></i></div>
+                            <p class="text-muted mb-0">Nenhuma disciplina cadastrada neste semestre.</p>
+                            <p class="small text-muted">Use o botão "Nova Disciplina" acima para começar a mapear seus estudos.</p>
+                        </div>
+                    </div>
+                {% endif %}
             </div>
-            {% endfor %}
-        {% else %}
-            <div class="col-12 text-center py-5">
-                <p class="text-muted">Nenhuma disciplina cadastrada neste semestre.</p>
-            </div>
-        {% endif %}
+        </div>
     </div>
     
     <!-- Modais Globais -->
     <div class="modal fade" id="modalNovoSemestre" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <form method="POST" action="{{ url_for('novo_semestre') }}" class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Novo Semestre</h5>
+        <div class="modal-dialog modal-dialog-centered">
+            <form method="POST" action="{{ url_for('novo_semestre') }}" class="modal-content border-0 shadow" style="border-radius: 1rem;">
+                <div class="modal-header border-bottom-0 pb-0">
+                    <h5 class="modal-title fw-bold text-dark-emphasis">Criar Novo Semestre</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label class="form-label">Nome do Semestre</label>
-                        <input type="text" class="form-control" name="nome" placeholder="Ex: 3º Semestre" required>
+                <div class="modal-body pt-3">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" name="nome" id="nomeSemestre" placeholder="Ex: 3º Semestre" required>
+                        <label for="nomeSemestre">Nome do Semestre (ex: 1º Semestre 2026)</label>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Salvar</button>
+                <div class="modal-footer border-top-0 pt-0">
+                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary rounded-pill px-4 fw-semibold">Criar Semestre</button>
                 </div>
             </form>
         </div>
@@ -215,40 +430,203 @@
 
     {% if semestre_atual %}
     <div class="modal fade" id="modalNovaMateria" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <form method="POST" action="{{ url_for('nova_materia') }}" class="modal-content">
+        <div class="modal-dialog modal-dialog-centered">
+            <form method="POST" action="{{ url_for('nova_materia') }}" class="modal-content border-0 shadow" style="border-radius: 1rem;">
                 <input type="hidden" name="semestre_id" value="{{ semestre_atual.id }}">
-                <div class="modal-header">
-                    <h5 class="modal-title">Nova Disciplina</h5>
+                <div class="modal-header border-bottom-0 pb-0">
+                    <h5 class="modal-title fw-bold text-dark-emphasis">Adicionar Nova Disciplina</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label class="form-label">Nome da Disciplina</label>
-                        <input type="text" class="form-control" name="nome" required>
+                <div class="modal-body pt-3">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" name="nome" id="nomeMateria" placeholder="Ex: Engenharia de Software" required>
+                        <label for="nomeMateria">Nome da Disciplina</label>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Carga Horária</label>
-                        <input type="number" class="form-control" name="carga_horaria" value="60">
+                    <div class="form-floating mb-3">
+                        <input type="number" class="form-control" name="carga_horaria" id="cargaMateria" placeholder="Ex: 60" value="60" required>
+                        <label for="cargaMateria">Carga Horária (horas)</label>
                     </div>
                     <div class="row">
-                        <div class="col-6 mb-3">
-                            <label class="form-label">Limite de Faltas</label>
-                            <input type="number" class="form-control" name="max_faltas" value="20">
+                        <div class="col-6">
+                            <div class="form-floating mb-3">
+                                <input type="number" class="form-control" name="max_faltas" id="faltasMateria" placeholder="Ex: 20" value="20" required>
+                                <label for="faltasMateria">Limite de Faltas</label>
+                            </div>
                         </div>
-                        <div class="col-6 mb-3">
-                            <label class="form-label">Média Necessária</label>
-                            <input type="number" step="0.1" class="form-control" name="media_necessaria" value="7.0">
+                        <div class="col-6">
+                            <div class="form-floating mb-3">
+                                <input type="number" step="0.1" class="form-control" name="media_necessaria" id="mediaMateria" placeholder="Ex: 7.0" value="7.0" required>
+                                <label for="mediaMateria">Média de Aprovação</label>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Salvar</button>
+                <div class="modal-footer border-top-0 pt-0">
+                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary rounded-pill px-4 fw-semibold">Mapear Disciplina</button>
                 </div>
             </form>
         </div>
     </div>
     {% endif %}
 </main>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Configuração e Renderização do Chart.js
+    document.addEventListener('DOMContentLoaded', () => {
+        const ctx = document.getElementById('disciplinasChart');
+        if (!ctx) return;
+        
+        const labels = [];
+        const medias = [];
+        const minimas = [];
+        
+        {% for m in materias %}
+            labels.push("{{ m.nome }}");
+            medias.push({{ m.media }});
+            minimas.push({{ m.media_necessaria }});
+        {% endfor %}
+        
+        if (labels.length === 0) {
+            ctx.parentNode.innerHTML = '<div class="text-center py-4 text-muted"><i class="bi bi-bar-chart fs-1 d-block mb-1 opacity-50"></i>Nenhuma disciplina ativa neste semestre para exibir o gráfico.</div>';
+            return;
+        }
+        
+        let chartInstance = null;
+        
+        function renderChart() {
+            const isDark = document.documentElement.getAttribute('data-bs-theme') === 'dark';
+            const textColor = isDark ? '#94a3b8' : '#475569';
+            const gridColor = isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.05)';
+            const barBgColor = isDark ? 'rgba(56, 189, 248, 0.8)' : 'rgba(13, 110, 253, 0.85)';
+            const barBorderColor = isDark ? 'rgba(56, 189, 248, 1)' : 'rgba(13, 110, 253, 1)';
+            
+            if (chartInstance) {
+                chartInstance.destroy();
+            }
+            
+            chartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Média Atual',
+                            data: medias,
+                            backgroundColor: barBgColor,
+                            borderColor: barBorderColor,
+                            borderWidth: 1,
+                            borderRadius: 4,
+                            barThickness: 20
+                        },
+                        {
+                            label: 'Média Necessária',
+                            data: minimas,
+                            type: 'line',
+                            borderColor: '#ef4444',
+                            borderWidth: 1.5,
+                            borderDash: [5, 5],
+                            fill: false,
+                            pointRadius: 0
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: textColor,
+                                font: { family: 'Inter', size: 11, weight: '500' }
+                            }
+                        },
+                        tooltip: {
+                            titleFont: { family: 'Inter', size: 12 },
+                            bodyFont: { family: 'Inter', size: 11 }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            min: 0,
+                            max: 10,
+                            grid: { color: gridColor },
+                            ticks: {
+                                color: textColor,
+                                font: { family: 'Inter', size: 10 }
+                            }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: {
+                                color: textColor,
+                                font: { family: 'Inter', size: 10 }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        renderChart();
+        
+        // Atualizar cores do gráfico na troca de tema
+        window.addEventListener('themeChanged', () => {
+            setTimeout(renderChart, 150);
+        });
+    });
+
+    // Função do Simulador de Notas (Javascript Local)
+    function calcularSimulador(materiaId, mediaNecessaria) {
+        const inputPeso = document.getElementById('pesoProx' + materiaId);
+        const divResult = document.getElementById('resultadoSimulacao' + materiaId);
+        
+        if (!inputPeso || !divResult) return;
+        
+        const pesoProx = parseFloat(inputPeso.value);
+        if (isNaN(pesoProx) || pesoProx <= 0) {
+            alert("Por favor, insira um peso válido.");
+            return;
+        }
+        
+        let somaPesos = 0;
+        let somaPonderada = 0;
+        
+        // Coleta e cálculo a partir das notas já injetadas no HTML pelo Flask/Jinja
+        const materiaNotas = [];
+        
+        {% for mat in materias %}
+            if (materiaId === {{ mat.id }}) {
+                {% for n in mat.notas %}
+                    somaPesos += {{ n.peso }};
+                    somaPonderada += {{ n.valor }} * {{ n.peso }};
+                {% endfor %}
+            }
+        {% endfor %}
+        
+        let notaNecessaria = 0;
+        if (somaPesos === 0) {
+            notaNecessaria = mediaNecessaria;
+        } else {
+            const somaPesosNova = somaPesos + pesoProx;
+            const valorAlvo = mediaNecessaria * somaPesosNova;
+            notaNecessaria = (valorAlvo - somaPonderada) / pesoProx;
+        }
+        
+        divResult.classList.remove('d-none', 'alert-info', 'alert-success', 'alert-danger', 'alert-warning');
+        
+        if (notaNecessaria <= 0) {
+            divResult.classList.add('alert-success');
+            divResult.innerHTML = `<i class="bi bi-emoji-smile-fill me-2"></i> <strong>Aprovado!</strong> Com as notas atuais, você já superou a média de aprovação deste semestre. Nota de simulação necessária: 0.00.`;
+        } else if (notaNecessaria > 10) {
+            divResult.classList.add('alert-danger');
+            divResult.innerHTML = `<i class="bi bi-exclamation-octagon-fill me-2"></i> <strong>Atenção!</strong> Você precisa tirar no mínimo <span class="fw-bold">${notaNecessaria.toFixed(2)}</span> para passar. Como ultrapassa 10.0, será preciso realizar provas adicionais ou aumentar o peso.`;
+        } else {
+            divResult.classList.add('alert-warning');
+            divResult.innerHTML = `<i class="bi bi-lightning-charge-fill me-2"></i> Você precisa tirar no mínimo <strong class="text-dark-emphasis">${notaNecessaria.toFixed(2)}</strong> na próxima avaliação de peso ${pesoProx.toFixed(1)} para passar.`;
+        }
+    }
+</script>
 {% endblock %}

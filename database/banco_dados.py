@@ -262,11 +262,13 @@ class BancoDados:
         materias = cursor.fetchall()
         cursor.close()
         
-        total_produto = 0
-        total_carga = 0
+        total_produto = 0.0
+        total_carga = 0.0
         for m in materias:
-            total_produto += m['media'] * m['carga_horaria']
-            total_carga += m['carga_horaria']
+            media = float(m['media']) if m['media'] is not None else 0.0
+            carga = float(m['carga_horaria']) if m['carga_horaria'] is not None else 0.0
+            total_produto += media * carga
+            total_carga += carga
         
         if total_carga == 0:
             return 0.0
@@ -298,7 +300,7 @@ class BancoDados:
             cursor.execute("SELECT * FROM notas WHERE materia_id = %s", (mat.id,))
             notas_db = cursor.fetchall()
             for n in notas_db:
-                mat.notas.append(Nota(float(n['valor']), float(n['peso'])))
+                mat.notas.append(Nota(float(n['valor']), float(n['peso']), id=n['id'], materia_id=n['materia_id']))
             
             materias.append(mat)
             
@@ -384,6 +386,23 @@ class BancoDados:
         return sucesso
 
     @staticmethod
+    def remover_falta(materia_id, qtd):
+        cursor, conexao = BancoDados._get_cursor()
+        if not cursor: return False
+        
+        try:
+            # GREATEST(0, ...) garante que as faltas não fiquem negativas
+            cursor.execute("UPDATE materias SET faltas = GREATEST(0, faltas - %s) WHERE id = %s", (qtd, materia_id))
+            conexao.commit()
+            sucesso = cursor.rowcount > 0
+        except Exception as e:
+            print(f"Erro ao remover falta: {e}")
+            sucesso = False
+        finally:
+            cursor.close()
+        return sucesso
+
+    @staticmethod
     def adicionar_nota(materia_id, valor, peso):
         cursor, conexao = BancoDados._get_cursor()
         if not cursor: return False
@@ -409,3 +428,40 @@ class BancoDados:
         finally:
             cursor.close()
         return sucesso
+
+    @staticmethod
+    def excluir_nota(nota_id):
+        """Exclui uma nota específica e recalcula a média da matéria."""
+        cursor, conexao = BancoDados._get_cursor()
+        if not cursor: return False
+        
+        try:
+            # Obter materia_id para recalcular a média depois
+            cursor.execute("SELECT materia_id FROM notas WHERE id = %s", (nota_id,))
+            res = cursor.fetchone()
+            if not res:
+                return False
+            materia_id = res['materia_id']
+            
+            # Excluir a nota
+            cursor.execute("DELETE FROM notas WHERE id = %s", (nota_id,))
+            conexao.commit()
+            
+            # Recalcular média
+            cursor.execute("SELECT * FROM notas WHERE materia_id = %s", (materia_id,))
+            notas = cursor.fetchall()
+            soma_pesos = sum(float(n['peso']) for n in notas)
+            if soma_pesos > 0:
+                soma_ponderada = sum(float(n['valor']) * float(n['peso']) for n in notas)
+                media = soma_ponderada / soma_pesos
+            else:
+                media = 0.0
+                
+            cursor.execute("UPDATE materias SET media = %s WHERE id = %s", (media, materia_id))
+            conexao.commit()
+            return True
+        except Exception as e:
+            print(f"Erro ao excluir nota: {e}")
+            return False
+        finally:
+            cursor.close()

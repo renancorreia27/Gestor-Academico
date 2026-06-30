@@ -21,16 +21,17 @@
     }
     
     .onboarding-bg {
-        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        background: linear-gradient(135deg, var(--bg-primary) 0%, rgba(44, 62, 80, 0.15) 100%);
         min-height: 100vh;
     }
     
     .glass-card {
-        background: rgba(255, 255, 255, 0.9);
-        backdrop-filter: blur(10px);
+        background: var(--card-bg);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
         border-radius: 1.5rem;
-        border: 1px solid rgba(255, 255, 255, 0.5);
-        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+        border: 1px solid var(--card-border);
+        box-shadow: var(--card-shadow);
     }
     
     .progress-indicator {
@@ -43,7 +44,7 @@
         width: 12px;
         height: 12px;
         border-radius: 50%;
-        background-color: #e9ecef;
+        background-color: var(--card-border);
         transition: background-color 0.3s ease;
     }
     .progress-dot.active {
@@ -53,14 +54,18 @@
     /* Inputs estilizados */
     .floating-input {
         border-radius: 1rem;
-        border: 1px solid #dee2e6;
+        border: 1px solid var(--card-border);
         padding: 1rem;
         box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
         transition: all 0.3s ease;
+        background-color: var(--card-bg);
+        color: var(--text-primary);
     }
     .floating-input:focus {
         box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
         border-color: #86b7fe;
+        background-color: var(--card-bg);
+        color: var(--text-primary);
     }
 </style>
 {% endblock %}
@@ -70,11 +75,21 @@
     
     {% if not is_onboarding %}
     <header class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-4 border-bottom w-100">
-        <h1 class="h2">Meu Perfil</h1>
+        <h1 class="h3 mb-0 fw-bold text-dark-emphasis"><i class="bi bi-person-badge-fill text-primary me-2"></i>Meu Perfil Acadêmico</h1>
+        
+        <div class="d-flex align-items-center gap-3">
+            <!-- Botão de Alternar Tema (☀️ / 🌙) -->
+            <button id="themeToggleBtn" class="btn btn-link text-decoration-none p-2 border rounded-circle bg-body-tertiary flex-shrink-0" title="Alternar Tema" style="width: 40px; height: 40px; display: inline-flex; align-items: center; justify-content: center; border-color: var(--card-border) !important;">
+                <i class="bi bi-moon-fill text-secondary fs-5"></i>
+            </button>
+            <a href="{{ url_for('logout') }}" class="btn btn-outline-danger fw-semibold d-flex align-items-center gap-2 rounded-pill px-3 flex-shrink-0" style="height: 40px;">
+                <i class="bi bi-box-arrow-right"></i> Sair
+            </a>
+        </div>
     </header>
     {% endif %}
 
-    <div class="card {% if is_onboarding %}glass-card p-5 w-100" style="max-width: 650px;"{% else %}shadow-sm border-0 w-100"{% endif %}>
+    <div class="card {% if is_onboarding %}glass-card p-4 p-md-5 w-100" style="max-width: 650px;"{% else %}card-custom w-100 p-4"{% endif %}>
         <div class="card-body">
             
             {% if is_onboarding %}
@@ -92,7 +107,7 @@
                     {% if is_onboarding %}
                     <div class="text-center mb-5">
                         <div class="display-4 text-primary mb-3"><i class="bi bi-mortarboard-fill"></i></div>
-                        <h2 class="fw-bold text-dark">Bem-vindo(a), {{ usuario.nome.split(' ')[0] if usuario.nome else 'Aluno' }}!</h2>
+                        <h2 class="fw-bold text-dark-emphasis">Bem-vindo(a), {{ usuario.nome.split(' ')[0] if usuario.nome else 'Aluno' }}!</h2>
                         <p class="text-muted">Vamos preparar o seu ambiente. Onde você estuda?</p>
                     </div>
                     {% endif %}
@@ -110,7 +125,7 @@
 
                     {% if is_onboarding %}
                     <div class="mt-5 text-end">
-                        <button type="button" class="btn btn-primary btn-lg rounded-pill px-5 shadow-sm" onclick="nextStep(1, 2)">Próximo <i class="bi bi-arrow-right"></i></button>
+                        <button type="button" class="btn btn-primary btn-lg rounded-pill px-5 shadow-sm fw-semibold" onclick="nextStep(1, 2)">Próximo <i class="bi bi-arrow-right ms-1"></i></button>
                     </div>
                     {% endif %}
                 </div>
@@ -120,7 +135,7 @@
                     {% if is_onboarding %}
                     <div class="text-center mb-5">
                         <div class="display-4 text-primary mb-3"><i class="bi bi-clock-history"></i></div>
-                        <h3 class="fw-bold text-dark">Duração do Curso</h3>
+                        <h3 class="fw-bold text-dark-emphasis">Duração do Curso</h3>
                         <p class="text-muted">Isso nos ajudará a montar a sua barra de progresso.</p>
                     </div>
                     {% endif %}
@@ -131,15 +146,15 @@
                             <input type="number" class="form-control form-control-lg floating-input" name="semestres_totais" id="semestres" value="{{ usuario.semestres_totais or 8 }}" required>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label fw-bold text-secondary">Carga Horária (h)</label>
+                            <label class="form-label fw-bold text-secondary">Carga Horária Total (h)</label>
                             <input type="number" class="form-control form-control-lg floating-input" name="carga_horaria_total" id="carga" value="{{ usuario.carga_horaria_total or 3200 }}" required>
                         </div>
                     </div>
 
                     {% if is_onboarding %}
                     <div class="mt-5 d-flex justify-content-between">
-                        <button type="button" class="btn btn-light btn-lg rounded-pill px-4 text-muted border" onclick="nextStep(2, 1)"><i class="bi bi-arrow-left"></i> Voltar</button>
-                        <button type="button" class="btn btn-primary btn-lg rounded-pill px-5 shadow-sm" onclick="nextStep(2, 3)">Próximo <i class="bi bi-arrow-right"></i></button>
+                        <button type="button" class="btn btn-light btn-lg rounded-pill px-4 text-muted border fw-semibold" onclick="nextStep(2, 1)"><i class="bi bi-arrow-left me-1"></i> Voltar</button>
+                        <button type="button" class="btn btn-primary btn-lg rounded-pill px-5 shadow-sm fw-semibold" onclick="nextStep(2, 3)">Próximo <i class="bi bi-arrow-right ms-1"></i></button>
                     </div>
                     {% endif %}
                 </div>
@@ -149,24 +164,24 @@
                     {% if is_onboarding %}
                     <div class="text-center mb-5">
                         <div class="display-4 text-warning mb-3"><i class="bi bi-trophy-fill"></i></div>
-                        <h3 class="fw-bold text-dark">Sua Grande Meta</h3>
+                        <h3 class="fw-bold text-dark-emphasis">Sua Grande Meta</h3>
                         <p class="text-muted">Defina o Índice de Rendimento Acadêmico (IRA) que você quer alcançar.</p>
                     </div>
                     {% endif %}
 
                     <div class="row g-4 justify-content-center">
                         <div class="col-md-8 text-center">
-                            <label class="form-label fw-bold text-secondary">Meta de IRA</label>
-                            <input type="number" step="0.1" class="form-control form-control-lg floating-input text-center fs-3 fw-bold text-primary" name="meta_ira" id="meta" value="{{ usuario.meta_ira or 7.5 }}" required>
+                            <label class="form-label fw-bold text-secondary d-block mb-3">Meta de IRA Geral (0.0 a 10.0)</label>
+                            <input type="number" step="0.1" min="0" max="10" class="form-control form-control-lg floating-input text-center fs-3 fw-bold text-primary" name="meta_ira" id="meta" value="{{ usuario.meta_ira or 7.5 }}" required>
                         </div>
                     </div>
 
                     <div class="mt-5 {% if is_onboarding %}d-flex justify-content-between{% else %}text-end mt-4{% endif %}">
                         {% if is_onboarding %}
-                        <button type="button" class="btn btn-light btn-lg rounded-pill px-4 text-muted border" onclick="nextStep(3, 2)"><i class="bi bi-arrow-left"></i> Voltar</button>
-                        <button type="submit" class="btn btn-success btn-lg rounded-pill px-5 shadow-sm">Concluir <i class="bi bi-check-circle ms-1"></i></button>
+                        <button type="button" class="btn btn-light btn-lg rounded-pill px-4 text-muted border fw-semibold" onclick="nextStep(3, 2)"><i class="bi bi-arrow-left me-1"></i> Voltar</button>
+                        <button type="submit" class="btn btn-success btn-lg rounded-pill px-5 shadow-sm fw-semibold">Concluir <i class="bi bi-check-circle ms-1"></i></button>
                         {% else %}
-                        <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                        <button type="submit" class="btn btn-primary rounded-pill px-4 py-2 fw-semibold shadow-sm">Salvar Alterações</button>
                         {% endif %}
                     </div>
                 </div>
@@ -183,7 +198,7 @@ function nextStep(current, next) {
     const currentStep = document.getElementById('step' + current);
     const nextStep = document.getElementById('step' + next);
     
-    // Validate inputs in current step before moving forward
+    // Validar campos obrigatórios do passo atual
     if (next > current) {
         const inputs = currentStep.querySelectorAll('input[required]');
         for (let input of inputs) {
@@ -200,7 +215,7 @@ function nextStep(current, next) {
         currentStep.classList.remove('active', 'fade-out');
         nextStep.classList.add('active');
         
-        // Update dots
+        // Atualizar dots de progresso
         const dots = document.querySelectorAll('.progress-dot');
         dots.forEach((dot, index) => {
             if (index < next) {
@@ -209,7 +224,7 @@ function nextStep(current, next) {
                 dot.classList.remove('active');
             }
         });
-    }, 300); // Wait for fade out animation
+    }, 300);
 }
 </script>
 {% endif %}

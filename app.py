@@ -117,14 +117,29 @@ def adicionar_nota(id):
     sem_id = request.form.get('semestre_id')
     return redirect(url_for('dashboard', semestre_id=sem_id))
 
+@app.route('/materia/<int:materia_id>/nota/<int:nota_id>/deletar', methods=['POST'])
+def deletar_nota(materia_id, nota_id):
+    if 'user_id' not in session: return redirect(url_for('login'))
+    BancoDados.excluir_nota(nota_id)
+    flash("Nota excluída com sucesso!", "success")
+    sem_id = request.form.get('semestre_id')
+    return redirect(url_for('dashboard', semestre_id=sem_id))
+
 @app.route('/materia/<int:id>/falta', methods=['POST'])
 def adicionar_falta(id):
     if 'user_id' not in session: return redirect(url_for('login'))
     qtd = request.form.get('qtd', type=int, default=1)
     BancoDados.adicionar_falta(id, qtd)
     flash("Falta registrada!", "warning")
-    sem_id = request.form.get('semestre_id')
-    return redirect(url_for('dashboard', semestre_id=sem_id))
+    return redirect(request.referrer or url_for('dashboard'))
+
+@app.route('/materia/<int:id>/remover_falta', methods=['POST'])
+def remover_falta(id):
+    if 'user_id' not in session: return redirect(url_for('login'))
+    qtd = request.form.get('qtd', type=int, default=1)
+    BancoDados.remover_falta(id, qtd)
+    flash("Falta removida!", "info")
+    return redirect(request.referrer or url_for('dashboard'))
 
 @app.route('/semestres')
 def semestres():
