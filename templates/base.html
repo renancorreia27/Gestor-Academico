@@ -49,9 +49,29 @@
                 
 
             </nav>
+            
+            <!-- Mobile Bottom Navigation -->
+            <nav class="d-md-none fixed-bottom bg-body border-top d-flex justify-content-around align-items-center py-2" style="z-index: 1030; box-shadow: 0 -2px 10px rgba(0,0,0,0.05); padding-bottom: calc(0.5rem + env(safe-area-inset-bottom)) !important;">
+                <a href="{{ url_for('dashboard') }}" class="text-center text-decoration-none {% if request.endpoint == 'dashboard' %}text-primary fw-bold{% else %}text-secondary{% endif %} d-flex flex-column align-items-center" style="width: 25%;">
+                    <i class="bi bi-house-door-fill fs-4 mb-1"></i>
+                    <span style="font-size: 0.65rem;">Início</span>
+                </a>
+                <a href="{{ url_for('semestres') }}" class="text-center text-decoration-none {% if request.endpoint == 'semestres' %}text-primary fw-bold{% else %}text-secondary{% endif %} d-flex flex-column align-items-center" style="width: 25%;">
+                    <i class="bi bi-journal-bookmark-fill fs-4 mb-1"></i>
+                    <span style="font-size: 0.65rem;">Semestres</span>
+                </a>
+                <a href="{{ url_for('materias') }}" class="text-center text-decoration-none {% if request.endpoint == 'materias' %}text-primary fw-bold{% else %}text-secondary{% endif %} d-flex flex-column align-items-center" style="width: 25%;">
+                    <i class="bi bi-book-fill fs-4 mb-1"></i>
+                    <span style="font-size: 0.65rem;">Disciplinas</span>
+                </a>
+                <a href="{{ url_for('perfil') }}" class="text-center text-decoration-none {% if request.endpoint == 'perfil' %}text-primary fw-bold{% else %}text-secondary{% endif %} d-flex flex-column align-items-center" style="width: 25%;">
+                    <i class="bi bi-person-badge-fill fs-4 mb-1"></i>
+                    <span style="font-size: 0.65rem;">Perfil</span>
+                </a>
+            </nav>
             {% endif %}
 
-            <div class="{% if hide_sidebar %}col-12 px-md-4{% else %}col-md-10 ms-sm-auto col-lg-10 px-md-4{% endif %} d-flex flex-column min-vh-100">
+            <div class="{% if hide_sidebar %}col-12 px-3 px-md-4{% else %}col-md-10 ms-sm-auto col-lg-10 px-3 px-md-4 pt-2 pt-md-0 pb-5 pb-md-0 mb-4 mb-md-0{% endif %} d-flex flex-column min-vh-100">
                 
                 {% block content %}{% endblock %}
 
